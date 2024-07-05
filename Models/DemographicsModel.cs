@@ -8,7 +8,7 @@ public class Demographics
     [JsonIgnore]
     public int DemographicsId {get; set;}
 
-    public string? SocialSecurity {get; set;}
+    public string? SocialSecurity {get; set;} //work on adding security to this
 
     public string? DriversLicense {get; set;}
 
