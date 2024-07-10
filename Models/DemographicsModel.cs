@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace fsiplanner_backend.Models;
@@ -34,4 +35,8 @@ public class Demographics
     public string? Email {get; set;}
 
     public string? Birthday {get; set;}
+
+    //each user matched up to their corresponding asset sheet
+    [ForeignKey("User")]
+    public int UserId {get; set;}
 }
