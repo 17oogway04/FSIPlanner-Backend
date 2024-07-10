@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace fsiplanner_backend.Models;
@@ -30,4 +31,8 @@ public class DisabilityInsurance
     public string? EliminationPeriod {get; set;}
 
     public string? BenefitPeriod {get; set;}
+
+    //each user matched up to their corresponding asset sheet
+    [ForeignKey("User")]
+    public int UserId {get; set;}
 }

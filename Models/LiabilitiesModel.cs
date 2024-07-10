@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace fsiplanner_backend.Models;
@@ -20,5 +21,9 @@ public class Liabilities
     public string? Term {get; set;}
 
     public string? Value {get; set;}
+
+    //each user matched up to their corresponding asset sheet
+    [ForeignKey("User")]
+    public int UserId {get; set;}
 
 }
