@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace fsiplanner_backend.Models;
@@ -29,4 +30,9 @@ public class Assets
     public string? Type {get; set;}
 
     public string? Bucket {get; set;}
+
+
+    //each user matched up to their corresponding asset sheet
+    [ForeignKey("User")]
+    public int UserId {get; set;}
 }
