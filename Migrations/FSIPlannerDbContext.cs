@@ -103,6 +103,7 @@ public class FSIPlannerDbContext : DbContext
             entity.Property(e => e.Premium);
             entity.Property(e => e.ExpirationDate);
             entity.Property(e => e.Deductible);
+            entity.Property(e => e.LiabilityLimit);
             //matching up users to their PC page
             entity.HasIndex(e => e.UserId);
             entity.Property(e => e.UserId).IsRequired();
