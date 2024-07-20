@@ -1,0 +1,14 @@
+using fsiplanner_backend.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace fsiplanner_backend.Repositories;
+
+public interface INotesRepository
+{
+    IEnumerable<Notes> GetAllNotes();
+    Task<IEnumerable<Notes>> GetNotesByUsername(string username);
+    Notes? GetNote(int noteId);
+    Notes CreateNote(Notes newNote);
+    Notes UpdateComment(Notes newNote);
+    void DeleteNote(int noteId);
+}
