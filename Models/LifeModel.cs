@@ -29,6 +29,8 @@ public string? Riders {get; set;}
 public string? RidersBenefit {get; set;}
 
 public string? PercentageToSavings {get; set;}
+    public string? Username {get; set;}
+
 
 //each user matched up to their corresponding asset sheet
     [ForeignKey("User")]

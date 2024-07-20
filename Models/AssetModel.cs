@@ -30,6 +30,8 @@ public class Assets
     public string? Type {get; set;}
 
     public string? Bucket {get; set;}
+        public string? Username {get; set;}
+
 
 
     //each user matched up to their corresponding asset sheet

@@ -31,6 +31,8 @@ public class DisabilityInsurance
     public string? EliminationPeriod {get; set;}
 
     public string? BenefitPeriod {get; set;}
+        public string? Username {get; set;}
+
 
     //each user matched up to their corresponding asset sheet
     [ForeignKey("User")]
