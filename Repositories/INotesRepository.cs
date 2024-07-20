@@ -9,6 +9,6 @@ public interface INotesRepository
     Task<IEnumerable<Notes>> GetNotesByUsername(string username);
     Notes? GetNote(int noteId);
     Notes CreateNote(Notes newNote);
-    Notes UpdateComment(Notes newNote);
+    Notes UpdateNote(Notes newNote);
     void DeleteNote(int noteId);
 }

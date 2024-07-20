@@ -41,7 +41,7 @@ public class NotesRepository : INotesRepository
             .ToListAsync();
     }
 
-    public Notes UpdateComment(Notes newNote)
+    public Notes UpdateNote(Notes newNote)
     {
         var originalNote = _context.Notes.Find(newNote.NotesId);
 
