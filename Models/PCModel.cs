@@ -13,6 +13,8 @@ public class PC
     public string? ExpirationDate {get; set;}
     public string? Deductible {get; set;}
     public string? LiabilityLimit {get; set;}
+    public string? Username {get; set;}
+
 
     [ForeignKey("User")]
     public int UserId {get; set;}

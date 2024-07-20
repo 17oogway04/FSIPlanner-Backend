@@ -21,6 +21,8 @@ public class Liabilities
     public string? Term {get; set;}
 
     public string? Value {get; set;}
+        public string? Username {get; set;}
+
 
     //each user matched up to their corresponding asset sheet
     [ForeignKey("User")]

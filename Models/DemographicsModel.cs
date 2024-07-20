@@ -35,6 +35,8 @@ public class Demographics
     public string? Email {get; set;}
 
     public string? Birthday {get; set;}
+        public string? Username {get; set;}
+
 
     //each user matched up to their corresponding asset sheet
     [ForeignKey("User")]
