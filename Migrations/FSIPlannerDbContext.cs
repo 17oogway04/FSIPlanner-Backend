@@ -39,6 +39,7 @@ public class FSIPlannerDbContext : DbContext
             entity.Property(e => e.Balance).IsRequired();
             entity.Property(e => e.Type).IsRequired();
             entity.Property(e => e.Bucket);
+            entity.Property(e => e.Username);
             //matching up users to their asset page
             entity.HasIndex(e => e.UserId);
             entity.Property(e => e.UserId).IsRequired();
@@ -59,6 +60,7 @@ public class FSIPlannerDbContext : DbContext
             entity.Property(e => e.PhoneNumber);
             entity.Property(e => e.Email);
             entity.Property(e => e.Birthday);
+            entity.Property(e => e.Username);
             //matching up users to their demographic page
             entity.HasIndex(e => e.UserId);
             entity.Property(e => e.UserId).IsRequired();
@@ -73,6 +75,7 @@ public class FSIPlannerDbContext : DbContext
             entity.Property(e => e.Payment);
             entity.Property(e => e.Term);
             entity.Property(e => e.Value);
+            entity.Property(e => e.Username);
             //matching up users to their liability page
             entity.HasIndex(e => e.UserId);
             entity.Property(e => e.UserId).IsRequired();
@@ -91,6 +94,7 @@ public class FSIPlannerDbContext : DbContext
             entity.Property(e => e.Riders);
             entity.Property(e => e.RidersBenefit);
             entity.Property(e => e.PercentageToSavings);
+            entity.Property(e => e.Username);
             //matching up users to their life page
             entity.HasIndex(e => e.UserId);
             entity.Property(e => e.UserId).IsRequired();
@@ -104,6 +108,7 @@ public class FSIPlannerDbContext : DbContext
             entity.Property(e => e.ExpirationDate);
             entity.Property(e => e.Deductible);
             entity.Property(e => e.LiabilityLimit);
+            entity.Property(e => e.Username);
             //matching up users to their PC page
             entity.HasIndex(e => e.UserId);
             entity.Property(e => e.UserId).IsRequired();
@@ -123,6 +128,7 @@ public class FSIPlannerDbContext : DbContext
             entity.Property(e => e.RidersBenefit);
             entity.Property(e => e.EliminationPeriod);
             entity.Property(e => e.BenefitPeriod);
+            entity.Property(e => e.Username);
             //matching up users to their disability insurance page
             entity.HasIndex(e => e.UserId);
             entity.Property(e => e.UserId).IsRequired();
@@ -130,9 +136,10 @@ public class FSIPlannerDbContext : DbContext
 
         modelBuilder.Entity<Notes>(entity => {
             entity.HasKey(e => e.NotesId);
-            entity.Property(e => e.Subject);
-            entity.Property(e => e.Description);
+            entity.Property(e => e.Subject).IsRequired();
+            entity.Property(e => e.Description).IsRequired();
             entity.Property(e => e.CreatedAt);
+            entity.Property(e => e.Username);
             //matching up users to their notes page
             entity.HasIndex(e => e.UserId);
             entity.Property(e => e.UserId).IsRequired();
