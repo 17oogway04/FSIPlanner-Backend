@@ -1,8 +1,6 @@
 using System.Security.Claims;
 using fsiplanner_backend.Models;
 using fsiplanner_backend.Repositories;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace fsiplanner_backend.Controllers
@@ -20,7 +18,7 @@ namespace fsiplanner_backend.Controllers
         }
 
         [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //Add authorization statement
         public ActionResult<IEnumerable<Notes>> GetNotes()
         {
             return Ok(_notesRepository.GetAllNotes());
@@ -28,7 +26,7 @@ namespace fsiplanner_backend.Controllers
 
         [HttpGet]
         [Route("{username}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //Add authorization statment
         public async Task<ActionResult<IEnumerable<Notes>>> GetNotesByUsername(string username)
         {
             IEnumerable<Notes> note = (IEnumerable<Notes>) await _notesRepository.GetNotesByUsername(username);
@@ -42,7 +40,7 @@ namespace fsiplanner_backend.Controllers
 
         [HttpGet]
         [Route("{notesId:int}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //add authorization statement
         public ActionResult<Notes> GetNotesById(int notesId)
         {
             var note = _notesRepository.GetNote(notesId);
@@ -55,7 +53,7 @@ namespace fsiplanner_backend.Controllers
         }
 
         [HttpPost]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //add authorization statement
         public ActionResult<Notes> CreateNote(Notes note)
         {
             if(!ModelState.IsValid)
@@ -71,7 +69,7 @@ namespace fsiplanner_backend.Controllers
 
         [HttpPut]
         [Route("{notesId:int}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //add authorization statement
         public ActionResult<Notes> UpdateNote(Notes notes)
         {
             if(!ModelState.IsValid)
@@ -83,7 +81,7 @@ namespace fsiplanner_backend.Controllers
 
         [HttpDelete]
         [Route("{notesId:int}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //add authorization statement
         public ActionResult DeleteNote(int notesId)
         {
             _notesRepository.DeleteNote(notesId);

@@ -1,6 +1,5 @@
 using System.Text;
 using fsiplanner_backend.Migrations;
-using fsiplanner_backend.Models;
 using fsiplanner_backend.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -39,14 +38,6 @@ builder.Services.AddControllers();
 
 builder.Services.AddSqlite<FSIPlannerDbContext>("Data Source = FSIPlanner.db");
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<INotesRepository, NotesRepository>();
-builder.Services.AddScoped<IPCRepository, PCRepository>();
-builder.Services.AddScoped<ILifeRepository, LifeRepository>();
-builder.Services.AddScoped<ILiabilityRepository, LiabilityRepository>();
-builder.Services.AddScoped<IDisabilityInsRepository, DisabilityInsRepository>();
-builder.Services.AddScoped<IDemographicsRepository, DemographicsRepository>();
-builder.Services.AddScoped<IAssetRepository, AssetRepository>();
-
 var secretKey = builder.Configuration["TokenSecret"];
 builder.Services.AddAuthentication(options =>
 {
