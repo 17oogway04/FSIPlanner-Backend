@@ -1,6 +1,8 @@
 using System.Security.Claims;
 using fsiplanner_backend.Models;
 using fsiplanner_backend.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace fsiplanner_backend.Controllers
@@ -19,7 +21,7 @@ namespace fsiplanner_backend.Controllers
         }
 
         [HttpGet]
-        //add authorization statement
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public ActionResult<IEnumerable<Assets>> GetAllAssets()
         {
             return Ok(_assetRepository.GetAllAssets());
@@ -27,7 +29,7 @@ namespace fsiplanner_backend.Controllers
 
         [HttpGet]
         [Route("{username}")]
-        //add authorization statement
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<IEnumerable<Assets>>> GetAssetsByUsername(string username)
         {
             IEnumerable<Assets> asset = await _assetRepository.GetAssetsByUsername(username);
@@ -41,7 +43,7 @@ namespace fsiplanner_backend.Controllers
 
         [HttpGet]
         [Route("{assetId:int}")]
-        //add authorization statement
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public ActionResult<Assets> GetAsset(int assetId)
         {
             var asset = _assetRepository.GetAsset(assetId);
@@ -54,7 +56,7 @@ namespace fsiplanner_backend.Controllers
         }
 
         [HttpPost]
-        //add authorization statement
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public ActionResult<Assets> CreateAsset(Assets asset)
         {
             if(!ModelState.IsValid)
@@ -62,7 +64,7 @@ namespace fsiplanner_backend.Controllers
                 return BadRequest();
             }
 
-            asset.UserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            asset.UserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
             var newAsset = _assetRepository.CreateAsset(asset);
             return Created(nameof(GetAsset), newAsset);
@@ -70,7 +72,7 @@ namespace fsiplanner_backend.Controllers
 
         [HttpPut]
         [Route("{assetId:int}")]
-        //add authorization statement
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public ActionResult<Assets> UpdateAsset(Assets asset)
         {
             if(!ModelState.IsValid)
@@ -82,7 +84,7 @@ namespace fsiplanner_backend.Controllers
 
         [HttpDelete]
         [Route("{assetId:int}")]
-        //add authorization statement
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public ActionResult DeleteAsset(int assetId)
         {
             _assetRepository.DeleteAsset(assetId);
