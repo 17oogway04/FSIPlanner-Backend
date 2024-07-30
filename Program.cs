@@ -2,6 +2,7 @@ using System.Text;
 using fsiplanner_backend.Migrations;
 using fsiplanner_backend.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -38,6 +39,9 @@ builder.Services.AddControllers();
 
 builder.Services.AddSqlite<FSIPlannerDbContext>("Data Source = FSIPlanner.db");
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<FSIPlannerDbContext>()
+    .AddDefaultTokenProviders();
 var secretKey = builder.Configuration["TokenSecret"];
 builder.Services.AddAuthentication(options =>
 {
@@ -63,6 +67,37 @@ builder.Services.AddAuthentication(options =>
 
 
 var app = builder.Build();
+
+using(var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+
+    var roles = new[]{"Admin", "User", "Manager"};
+
+    foreach(var role in roles)
+    {
+        if(!await roleManager.RoleExistsAsync(role))
+        {
+            await roleManager.CreateAsync(new IdentityRole(role));
+        }
+    }
+
+    var adminUser = await userManager.FindByEmailAsync("isaacm@mutualmail.com");
+    if(adminUser == null)
+    {
+        adminUser = new IdentityUser
+        {
+            UserName = "isaacm@mutualmail.com",
+            Email = "isaacm@mutualmail.com"
+        };
+        await userManager.CreateAsync(adminUser, "f$IPlaNN3r");
+    }
+    if(!await userManager.IsInRoleAsync(adminUser, "Admin"))
+    {
+        await userManager.AddToRoleAsync(adminUser, "Admin");
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

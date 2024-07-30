@@ -70,6 +70,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = "Admin")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public ActionResult<IEnumerable<User>> GetAllUsers()
     {
@@ -78,6 +79,7 @@ public class UserController : ControllerBase
 
     [HttpGet]
     [Route("{username}")]
+    [Authorize(Roles = "Admin")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<ActionResult<User>> GetUserByUsername(string username)
     {
