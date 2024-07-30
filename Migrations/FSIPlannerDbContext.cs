@@ -1,10 +1,14 @@
 using fsiplanner_backend.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace fsiplanner_backend.Migrations;
 
-public class FSIPlannerDbContext : DbContext
+public class FSIPlannerDbContext : IdentityDbContext<IdentityUser>
 {
+    public FSIPlannerDbContext(DbContextOptions<FSIPlannerDbContext> options)
+    : base(options){}
  public DbSet<User> User { get; set;}
  public DbSet<Assets> Asset {get; set;}
  public DbSet<Demographics> Demographics {get; set;}
