@@ -45,6 +45,13 @@ public class FSIPlannerDbContext : DbContext
             entity.Property(e => e.UserId).IsRequired();
         });
 
+        modelBuilder.Entity<BucketSummary>(entity => {
+            entity.Property(e => e.Type);
+            entity.Property(e => e.Balance);
+            entity.HasIndex(e => e.UserId);
+            entity.Property(e => e.UserId).IsRequired();
+        });
+
         modelBuilder.Entity<Demographics>(entity => {
             entity.HasKey(e => e.DemographicsId);
             entity.Property(e => e.SocialSecurity);

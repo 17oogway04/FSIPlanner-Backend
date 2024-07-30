@@ -24,7 +24,7 @@ public class Assets
     public string? MaturityDate {get; set;}
 
     [Required]
-    public string? Balance {get; set;}
+    public decimal? Balance {get; set;}
 
     [Required]
     public string? Type {get; set;}
@@ -35,6 +35,14 @@ public class Assets
 
 
     //each user matched up to their corresponding asset sheet
+    [ForeignKey("User")]
+    public int UserId {get; set;}
+}
+
+public class BucketSummary
+{
+    public string? Type {get; set;}
+    public decimal? Balance {get; set;}
     [ForeignKey("User")]
     public int UserId {get; set;}
 }

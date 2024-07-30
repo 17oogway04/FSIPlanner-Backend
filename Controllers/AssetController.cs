@@ -1,9 +1,11 @@
 using System.Security.Claims;
+using fsiplanner_backend.Migrations;
 using fsiplanner_backend.Models;
 using fsiplanner_backend.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace fsiplanner_backend.Controllers
 {
@@ -13,11 +15,13 @@ namespace fsiplanner_backend.Controllers
     {
         private readonly ILogger<AssetController> _logger;
         private readonly IAssetRepository _assetRepository;
+        private readonly FSIPlannerDbContext _context;
 
-        public AssetController(ILogger<AssetController> logger, IAssetRepository repository)
+        public AssetController(ILogger<AssetController> logger, IAssetRepository repository, FSIPlannerDbContext context)
         {
             _logger = logger;
             _assetRepository = repository;
+            _context = context;
         }
 
         [HttpGet]
@@ -33,7 +37,7 @@ namespace fsiplanner_backend.Controllers
         public async Task<ActionResult<IEnumerable<Assets>>> GetAssetsByUsername(string username)
         {
             IEnumerable<Assets> asset = await _assetRepository.GetAssetsByUsername(username);
-            if(asset == null || !asset.Any())
+            if (asset == null || !asset.Any())
             {
                 return NotFound();
             }
@@ -47,7 +51,7 @@ namespace fsiplanner_backend.Controllers
         public ActionResult<Assets> GetAsset(int assetId)
         {
             var asset = _assetRepository.GetAsset(assetId);
-            if(asset == null)
+            if (asset == null)
             {
                 return NotFound();
             }
@@ -59,7 +63,7 @@ namespace fsiplanner_backend.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public ActionResult<Assets> CreateAsset(Assets asset)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
@@ -75,7 +79,7 @@ namespace fsiplanner_backend.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public ActionResult<Assets> UpdateAsset(Assets asset)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
@@ -90,6 +94,23 @@ namespace fsiplanner_backend.Controllers
             _assetRepository.DeleteAsset(assetId);
             return NoContent();
         }
+        [HttpGet("buckets")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<IEnumerable<BucketSummary>>> GetBuckets()
+        {
+            var summaries = await _context.Asset
+                .GroupBy(a => a.Type)
+                .Select(g => new BucketSummary
+                {
+                    Type = g.Key,
+                    Balance = g.Sum(a => a.Balance)
+                })
+                .ToListAsync();
+
+            return Ok(summaries);
+        }
     }
+
+
 }
 
