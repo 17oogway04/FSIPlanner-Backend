@@ -6,6 +6,7 @@ public interface IAssetRepository
 {
     IEnumerable<Assets> GetAllAssets();
     Task<IEnumerable<Assets>> GetAssetsByUsername(string username);
+    Task<IEnumerable<Assets>> GetAssetsByUserId(int userId);
     Assets GetAsset(int assetId);
     Assets CreateAsset(Assets newAsset);
     Assets UpdateAsset(Assets newAsset);

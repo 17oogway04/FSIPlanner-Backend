@@ -9,6 +9,11 @@ public class DisabilityInsRepository : IDisabilityInsRepository
 
     private readonly FSIPlannerDbContext _context;
 
+    public DisabilityInsRepository(FSIPlannerDbContext context)
+    {
+        _context = context;
+    }
+
     public DisabilityInsurance CreateDisabilityIns(DisabilityInsurance newDisability)
     {
         _context.DisabilityIns.Add(newDisability);
@@ -34,6 +39,13 @@ public class DisabilityInsRepository : IDisabilityInsRepository
     public DisabilityInsurance GetDisabilityInsById(int disabilityInsId)
     {
         return _context.DisabilityIns.SingleOrDefault(x => x.DisabilityInsId == disabilityInsId)!;
+    }
+
+    public async Task<IEnumerable<DisabilityInsurance>> GetDisabilityInsByUserId(int userId)
+    {
+        return await _context.DisabilityIns
+            .Where(x => x.UserId == userId)
+            .ToListAsync();
     }
 
     public async Task<IEnumerable<DisabilityInsurance>> GetDisabilityInsByUsername(string username)

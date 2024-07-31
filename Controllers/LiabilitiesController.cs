@@ -27,7 +27,7 @@ namespace fsiplanner_backend.Controllers
         }
 
         [HttpGet]
-        [Route("{username}")]
+        [Route("by-username/{username}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<IEnumerable<Liabilities>>> GetLiabilityByUsername(string username)
         {
@@ -41,7 +41,20 @@ namespace fsiplanner_backend.Controllers
         }
 
         [HttpGet]
-        [Route("{liabilityId:int}")]
+        [Route("by-userId{userId}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<IEnumerable<Liabilities>>> GetLiabilityByUserId(int userId)
+        {
+            IEnumerable<Liabilities> liability = (IEnumerable<Liabilities>) await _liabilityRepository.GetLiabilitiesByUserId(userId);
+            if(liability == null || !liability.Any())
+            {
+                return NotFound();
+            }
+            return Ok(liability);
+        }
+
+        [HttpGet]
+        [Route("by-liabilityId{liabilityId}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public ActionResult<Liabilities> GetLiabilityById(int liabilityId)
         {

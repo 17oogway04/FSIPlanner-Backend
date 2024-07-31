@@ -27,7 +27,7 @@ namespace fsiplanner_backend.Controllers
         }
 
         [HttpGet]
-        [Route("{username}")]
+        [Route("by-username/{username}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<IEnumerable<Life>>> GetLifeByUsername(string username)
         {
@@ -42,7 +42,20 @@ namespace fsiplanner_backend.Controllers
         }
 
         [HttpGet]
-        [Route("{lifeId:int}")]
+        [Route("by-userId{userId}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<IEnumerable<Life>>> GetLifeByUserId(int userId)
+        {
+            IEnumerable<Life> life = (IEnumerable<Life>) await _lifeRepository.GetLifeByUserId(userId);
+            if(life == null || !life.Any())
+            {
+                return NotFound();
+            }
+            return Ok(life);
+        }
+
+        [HttpGet]
+        [Route("by-lifeId{lifeId}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public ActionResult<Life> GetLifeById(int lifeId)
         {

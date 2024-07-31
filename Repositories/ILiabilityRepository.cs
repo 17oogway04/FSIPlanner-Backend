@@ -6,6 +6,7 @@ public interface ILiabilityRepository
 {
     IEnumerable<Liabilities> GetAllLiabilites();
     Task<IEnumerable<Liabilities>> GetLiabilitiesByUsername(string username);
+    Task<IEnumerable<Liabilities>> GetLiabilitiesByUserId(int userId);
     Liabilities GetLiabilitiesById(int liabilityId);
     Liabilities CreateLiability(Liabilities newLiability);
     Liabilities UpdateLiability(Liabilities newLiability);

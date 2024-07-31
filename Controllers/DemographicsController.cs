@@ -29,7 +29,7 @@ namespace fsiplanner_backend.Controllers
         }
 
         [HttpGet]
-        [Route("{username}")]
+        [Route("by-username/{username}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<IEnumerable<Demographics>>> GetDemographicsByUsername(string username)
         {
@@ -43,7 +43,20 @@ namespace fsiplanner_backend.Controllers
         }
 
         [HttpGet]
-        [Route("{demographicId:int}")]
+        [Route("by-userId{userId}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<IEnumerable<Demographics>>> GetDemographicsByUserId(int userId)
+        {
+            IEnumerable<Demographics> demographics = (IEnumerable<Demographics>) await _demographicsRepository.GetDemographicsByUserId(userId);
+            if(demographics == null || !demographics.Any())
+            {
+                return NotFound();
+            }
+            return Ok(demographics);
+        }
+
+        [HttpGet]
+        [Route("by-demographicsId{demographicsId}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public ActionResult<Demographics> GetDemographicsById(int demographicId)
         {

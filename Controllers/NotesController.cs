@@ -27,7 +27,7 @@ namespace fsiplanner_backend.Controllers
         }
 
         [HttpGet]
-        [Route("{username}")]
+        [Route("by-username/{username}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<IEnumerable<Notes>>> GetNotesByUsername(string username)
         {
@@ -41,7 +41,20 @@ namespace fsiplanner_backend.Controllers
         }
 
         [HttpGet]
-        [Route("{notesId:int}")]
+        [Route("by-userId{userId}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<IEnumerable<Notes>>> GetNotesByUserId(int userId)
+        {
+            IEnumerable<Notes> note = (IEnumerable<Notes>) await _notesRepository.GetNotesByUserId(userId);
+            if(note == null || !note.Any())
+            {
+                return NotFound();
+            }
+            return Ok(note);
+        }
+
+        [HttpGet]
+        [Route("by-notesId{notesId}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public ActionResult<Notes> GetNotesById(int notesId)
         {

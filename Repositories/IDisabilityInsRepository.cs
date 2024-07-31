@@ -6,6 +6,7 @@ public interface IDisabilityInsRepository
 {
     IEnumerable<DisabilityInsurance> GetAllDisabilityIns();
     Task<IEnumerable<DisabilityInsurance>> GetDisabilityInsByUsername(string username);
+    Task<IEnumerable<DisabilityInsurance>> GetDisabilityInsByUserId(int userId);
     DisabilityInsurance GetDisabilityInsById(int disabilityInsId);
     DisabilityInsurance CreateDisabilityIns(DisabilityInsurance newDisability);
     DisabilityInsurance UpdateDisabilityIns(DisabilityInsurance newDisability);
