@@ -21,7 +21,7 @@ namespace fsiplanner_backend.Controllers
 
         [HttpGet]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public ActionResult<IEnumerable<DisabilityInsurance>> GetAllPC()
+        public ActionResult<IEnumerable<PC>> GetAllPC()
         {
             return Ok(_pcRepository.GetAllPC());
         }
@@ -37,6 +37,19 @@ namespace fsiplanner_backend.Controllers
                 return NotFound();
             }
 
+            return Ok(pc);
+        }
+
+        [HttpGet]
+        [Route("{userId}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<IEnumerable<PC>>> GetPCByUserId(int userId)
+        {
+            IEnumerable<PC> pc = (IEnumerable<PC>) await _pcRepository.GetPCByUserId(userId);
+            if(pc == null || !pc.Any())
+            {
+                return NotFound();
+            }
             return Ok(pc);
         }
 

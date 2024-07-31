@@ -6,8 +6,12 @@ namespace fsiplanner_backend.Repositories;
 
 public class PCRepository : IPCRepository
 {
-
     private readonly FSIPlannerDbContext _context;
+
+    public PCRepository(FSIPlannerDbContext context)
+    {
+        _context = context;
+    }
 
     public PC CreatePC(PC newPC)
     {
@@ -36,12 +40,21 @@ public class PCRepository : IPCRepository
         return _context.PC.SingleOrDefault(x => x.PCId == pcId)!;
     }
 
+    public async Task<IEnumerable<PC>> GetPCByUserId(int userId)
+    {
+        return await _context.PC
+            .Where(x => x.UserId == userId)
+            .ToListAsync();
+    }
+
     public async Task<IEnumerable<PC>> GetPCByUsername(string username)
     {
         return await _context.PC
             .Where(x => x.Username == username)
             .ToListAsync();
     }
+
+    
 
     public PC UpdatePC(PC newPC)
     {

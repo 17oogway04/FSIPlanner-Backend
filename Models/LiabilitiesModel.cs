@@ -5,7 +5,6 @@ namespace fsiplanner_backend.Models;
 
 public class Liabilities
 {
-    [JsonIgnore]
     public int LiabilitiesId {get; set;}
 
     public string? Type {get; set;} //the type will determine what category the liability goes in

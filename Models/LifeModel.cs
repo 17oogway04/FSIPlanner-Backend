@@ -5,7 +5,7 @@ namespace fsiplanner_backend.Models;
 
 public class Life
 {
-[JsonIgnore]
+
 public int LifeId {get; set;}
 
 public string? PolicyName {get; set;}

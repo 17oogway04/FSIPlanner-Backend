@@ -50,6 +50,7 @@ public class FSIPlannerDbContext : IdentityDbContext<IdentityUser>
         });
 
         modelBuilder.Entity<BucketSummary>(entity => {
+            entity.HasKey(e => e.BucketId);
             entity.Property(e => e.Type);
             entity.Property(e => e.Balance);
             entity.HasIndex(e => e.UserId);

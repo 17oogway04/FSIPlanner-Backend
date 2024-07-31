@@ -1,5 +1,6 @@
 using System.Text;
 using fsiplanner_backend.Migrations;
+using fsiplanner_backend.Models;
 using fsiplanner_backend.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -13,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Honeys_Kitchen_Backend", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "FSIPlanner_Backend", Version = "v1" });
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
@@ -39,6 +40,16 @@ builder.Services.AddControllers();
 
 builder.Services.AddSqlite<FSIPlannerDbContext>("Data Source = FSIPlanner.db");
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IAssetRepository, AssetRepository>();
+builder.Services.AddScoped<IDemographicsRepository, DemographicsRepository>();
+builder.Services.AddScoped<IDisabilityInsRepository, DisabilityInsRepository>();
+builder.Services.AddScoped<ILiabilityRepository, LiabilityRepository>();
+builder.Services.AddScoped<ILifeRepository, LifeRepository>();
+builder.Services.AddScoped<INotesRepository, NotesRepository>();
+builder.Services.AddScoped<IPCRepository, PCRepository>();
+
+
+
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<FSIPlannerDbContext>()
     .AddDefaultTokenProviders();
@@ -88,10 +99,10 @@ using(var scope = app.Services.CreateScope())
     {
         adminUser = new IdentityUser
         {
-            UserName = "isaacm@mutualmail.com",
+            UserName = "IsaacMFS!",
             Email = "isaacm@mutualmail.com"
         };
-        await userManager.CreateAsync(adminUser, "f$IPlaNN3r");
+        await userManager.CreateAsync(adminUser, "FSIPlaner@777");
     }
     if(!await userManager.IsInRoleAsync(adminUser, "Admin"))
     {
@@ -112,8 +123,9 @@ app.UseCors(builder => builder
     .AllowAnyMethod());
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();
