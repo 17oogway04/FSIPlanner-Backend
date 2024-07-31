@@ -5,7 +5,6 @@ namespace fsiplanner_backend.Models;
 
 public class PC
 {
-    [JsonIgnore]
     public int PCId {get; set;}
     public string? CompanyName {get; set;}
     public string? PolicyType {get; set;}

@@ -6,7 +6,6 @@ namespace fsiplanner_backend.Models;
 
 public class Notes
 {
-    [JsonIgnore]
     public int NotesId {get; set;}
     public string? Subject {get; set;}
     [Required]

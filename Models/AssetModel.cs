@@ -6,7 +6,6 @@ namespace fsiplanner_backend.Models;
 
 public class Assets
 {
-    [JsonIgnore]
     public int AssetId {get; set;}
 
     [Required]
@@ -41,6 +40,7 @@ public class Assets
 
 public class BucketSummary
 {
+    public int BucketId {get; set;}
     public string? Type {get; set;}
     public decimal? Balance {get; set;}
     [ForeignKey("User")]

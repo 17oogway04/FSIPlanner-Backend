@@ -5,7 +5,6 @@ namespace fsiplanner_backend.Models;
 
 public class DisabilityInsurance
 {
-    [JsonIgnore]
     public int DisabilityInsId {get; set;}
 
     public string? PolicyName {get; set;}

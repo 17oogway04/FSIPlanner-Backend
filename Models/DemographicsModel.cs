@@ -6,7 +6,7 @@ namespace fsiplanner_backend.Models;
 
 public class Demographics 
 {
-    [JsonIgnore]
+    
     public int DemographicsId {get; set;}
 
     public string? SocialSecurity {get; set;} //work on adding security to this
