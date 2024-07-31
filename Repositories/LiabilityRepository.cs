@@ -7,6 +7,11 @@ namespace fsiplanner_backend.Repositories;
 public class LiabilityRepository : ILiabilityRepository
 {
     private readonly FSIPlannerDbContext _context;
+
+    public LiabilityRepository(FSIPlannerDbContext context)
+    {
+        _context = context;
+    }
     public Liabilities CreateLiability(Liabilities newLiability)
     {
         _context.Liabilites.Add(newLiability);
@@ -32,6 +37,13 @@ public class LiabilityRepository : ILiabilityRepository
     public Liabilities GetLiabilitiesById(int liabilityId)
     {
         return _context.Liabilites.SingleOrDefault(l => l.LiabilitiesId == liabilityId)!;
+    }
+
+    public async Task<IEnumerable<Liabilities>> GetLiabilitiesByUserId(int userId)
+    {
+        return await _context.Liabilites
+            .Where(x => x.UserId == userId)
+            .ToListAsync();
     }
 
     public async Task<IEnumerable<Liabilities>> GetLiabilitiesByUsername(string username)

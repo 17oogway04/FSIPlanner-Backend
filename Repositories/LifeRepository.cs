@@ -9,6 +9,11 @@ public class LifeRepository : ILifeRepository
 
     private readonly FSIPlannerDbContext _context;
 
+    public LifeRepository(FSIPlannerDbContext context)
+    {
+        _context = context;
+    }
+
     public Life CreateLife(Life newLife)
     {
         _context.Life.Add(newLife);
@@ -34,6 +39,13 @@ public class LifeRepository : ILifeRepository
     public Life GetLifeById(int lifeId)
     {
         return _context.Life.SingleOrDefault(x => x.LifeId == lifeId)!;
+    }
+
+    public async Task<IEnumerable<Life>> GetLifeByUserId(int userId)
+    {
+        return await _context.Life
+            .Where(x => x.UserId == userId)
+            .ToListAsync();
     }
 
     public async Task<IEnumerable<Life>> GetLifeByUsername(string username)

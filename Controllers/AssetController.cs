@@ -32,7 +32,7 @@ namespace fsiplanner_backend.Controllers
         }
 
         [HttpGet]
-        [Route("{username}")]
+        [Route("by-username/{username}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<IEnumerable<Assets>>> GetAssetsByUsername(string username)
         {
@@ -46,7 +46,20 @@ namespace fsiplanner_backend.Controllers
         }
 
         [HttpGet]
-        [Route("{assetId:int}")]
+        [Route("by-userId{userId}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<IEnumerable<Assets>>> GetAssetsByUserId(int userId)
+        {
+            IEnumerable<Assets> asset = (IEnumerable<Assets>) await _assetRepository.GetAssetsByUserId(userId);
+            if(asset == null || !asset.Any())
+            {
+                return NotFound();
+            }
+            return Ok(asset);
+        }
+
+        [HttpGet]
+        [Route("by-assetId{assetId}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public ActionResult<Assets> GetAsset(int assetId)
         {

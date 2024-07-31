@@ -7,6 +7,11 @@ namespace fsiplanner_backend.Repositories;
 public class NotesRepository : INotesRepository
 {
     private readonly FSIPlannerDbContext _context;
+
+    public NotesRepository(FSIPlannerDbContext context)
+    {
+        _context = context;
+    }
     public Notes CreateNote(Notes newNote)
     {
         _context.Notes.Add(newNote);
@@ -32,6 +37,13 @@ public class NotesRepository : INotesRepository
     public Notes? GetNote(int noteId)
     {
         return _context.Notes.SingleOrDefault(c => c.NotesId == noteId);
+    }
+
+    public async Task<IEnumerable<Notes>> GetNotesByUserId(int userId)
+    {
+        return await _context.Notes
+            .Where(x => x.UserId == userId)
+            .ToListAsync();
     }
 
     public async Task<IEnumerable<Notes>> GetNotesByUsername(string username)

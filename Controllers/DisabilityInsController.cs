@@ -28,7 +28,7 @@ namespace fsiplanner_backend.Controllers
         }
 
         [HttpGet]
-        [Route("{username}")]
+        [Route("by-username/{username}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<IEnumerable<DisabilityInsurance>>> GetDisabilityByUsername(string username)
         {
@@ -41,7 +41,20 @@ namespace fsiplanner_backend.Controllers
         }
 
         [HttpGet]
-        [Route("{disabilityId:int}")]
+        [Route("by-userId{userId}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<IEnumerable<DisabilityInsurance>>> GetDisabilityByUserId(int userId)
+        {
+            IEnumerable<DisabilityInsurance> disability = (IEnumerable<DisabilityInsurance>) await _disabilityInsRepository.GetDisabilityInsByUserId(userId);
+            if(disability == null || !disability.Any())
+            {
+                return NotFound();
+            }
+            return Ok(disability);
+        }
+
+        [HttpGet]
+        [Route("by-disabilityId{disabilityId}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public ActionResult<DisabilityInsurance> GetDisabilityById(int disabilityId)
         {

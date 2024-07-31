@@ -6,6 +6,7 @@ public interface IDemographicsRepository
 {
     IEnumerable<Demographics> GetAllDemographics();
     Task<IEnumerable<Demographics>> GetDemographicsByUsername(string username);
+    Task<IEnumerable<Demographics>> GetDemographicsByUserId(int userId);
     Demographics GetDemographic(int demographicId);
     Demographics CreateDemographics(Demographics newDemographic);
     Demographics UpdateDemographic(Demographics newDemographic);

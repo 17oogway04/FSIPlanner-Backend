@@ -7,6 +7,7 @@ public interface INotesRepository
 {
     IEnumerable<Notes> GetAllNotes();
     Task<IEnumerable<Notes>> GetNotesByUsername(string username);
+    Task<IEnumerable<Notes>> GetNotesByUserId(int userId);
     Notes? GetNote(int noteId);
     Notes CreateNote(Notes newNote);
     Notes UpdateNote(Notes newNote);
