@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using fsiplanner_backend.Migrations;
 using fsiplanner_backend.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using bcrypt = BCrypt.Net.BCrypt;
@@ -21,7 +22,7 @@ public class UserRepository : IUserRepository
         _config = config;
     }
 
-    private string BuildToken(User user)
+     private string BuildToken(User user)
     {
         var secret = _config.GetValue<string>("TokenSecret");
         var signinkey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret!));
@@ -79,17 +80,17 @@ public class UserRepository : IUserRepository
     public string SignIn(string username, string password)
     {
         var user = _context.User.SingleOrDefault(x => x.UserName == username);
-        var verified = false;
-
-        if(user != null){
+        var verified = false; 
+        
+        if(user != null)
+        {
             verified = bcrypt.Verify(password, user.Password);
         }
 
-        if(user == null || !verified)
-        {
+        if(user == null || !verified){
             return string.Empty;
         }
-
+        
         return BuildToken(user);
     }
 }

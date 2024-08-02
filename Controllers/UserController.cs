@@ -69,18 +69,20 @@ public class UserController : ControllerBase
         return Ok(currentUser);
     }
 
+    
     [HttpGet]
     [Authorize(Roles = "Admin")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public ActionResult<IEnumerable<User>> GetAllUsers()
     {
         return Ok(_userRepository.GetAllUsers());
     }
-
+    
     [HttpGet]
-    [Route("{username}")]
+    [Route("{username}")]    
     [Authorize(Roles = "Admin")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
+    // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<ActionResult<User>> GetUserByUsername(string username)
     {
         var name = _userRepository.GetUserByUsername(username);

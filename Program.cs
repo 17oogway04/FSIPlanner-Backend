@@ -4,6 +4,7 @@ using fsiplanner_backend.Models;
 using fsiplanner_backend.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -48,8 +49,6 @@ builder.Services.AddScoped<ILifeRepository, LifeRepository>();
 builder.Services.AddScoped<INotesRepository, NotesRepository>();
 builder.Services.AddScoped<IPCRepository, PCRepository>();
 
-
-
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<FSIPlannerDbContext>()
     .AddDefaultTokenProviders();
@@ -82,7 +81,6 @@ var app = builder.Build();
 using(var scope = app.Services.CreateScope())
 {
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
     var roles = new[]{"Admin", "User", "Manager"};
 
@@ -93,20 +91,24 @@ using(var scope = app.Services.CreateScope())
             await roleManager.CreateAsync(new IdentityRole(role));
         }
     }
+}
+using(var scope = app.Services.CreateScope())
+{
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
-    var adminUser = await userManager.FindByEmailAsync("isaacm@mutualmail.com");
-    if(adminUser == null)
+    string email = "isaacm@mutualmail.com";
+    string password = "Test1234!";
+
+    if(await userManager.FindByEmailAsync(email) == null)
     {
-        adminUser = new IdentityUser
-        {
-            UserName = "IsaacMFS!",
-            Email = "isaacm@mutualmail.com"
-        };
-        await userManager.CreateAsync(adminUser, "FSIPlaner@777");
-    }
-    if(!await userManager.IsInRoleAsync(adminUser, "Admin"))
-    {
-        await userManager.AddToRoleAsync(adminUser, "Admin");
+        var user = new IdentityUser();
+        user.UserName = email;
+        user.Email = email;
+        user.EmailConfirmed = true;
+
+        await userManager.CreateAsync(user, password);
+
+        await userManager.AddToRoleAsync(user, "Admin");
     }
 }
 

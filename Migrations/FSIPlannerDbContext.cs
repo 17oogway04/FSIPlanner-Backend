@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace fsiplanner_backend.Migrations;
 
-public class FSIPlannerDbContext : IdentityDbContext<IdentityUser>
+public class FSIPlannerDbContext: IdentityDbContext<IdentityUser>
 {
     public FSIPlannerDbContext(DbContextOptions<FSIPlannerDbContext> options)
     : base(options){}
