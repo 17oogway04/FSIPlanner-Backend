@@ -112,10 +112,10 @@ namespace fsiplanner_backend.Controllers
         public async Task<ActionResult<IEnumerable<BucketSummary>>> GetBuckets()
         {
             var summaries = await _context.Asset
-                .GroupBy(a => a.Type)
+                .GroupBy(a => a.Bucket)
                 .Select(g => new BucketSummary
                 {
-                    Type = g.Key,
+                    Bucket = g.Key,
                     Balance = g.Sum(a => a.Balance)
                 })
                 .ToListAsync();
