@@ -22,6 +22,7 @@ public class UserController : ControllerBase
 
     [HttpPost]
     [Route("register")]
+    [Authorize(Policy = "UsernamePolicy")]
     public ActionResult CreateUser(User user)
     {
         if(user == null || !ModelState.IsValid)
@@ -79,7 +80,6 @@ public class UserController : ControllerBase
     
     [HttpGet]
     [Route("{username}")]    
-    // [Authorize(Username)]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<ActionResult<User>> GetUserByUsername(string username)
     {
