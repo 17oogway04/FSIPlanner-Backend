@@ -3,6 +3,7 @@ using fsiplanner_backend.Migrations;
 using fsiplanner_backend.Models;
 using fsiplanner_backend.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -39,7 +40,16 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddControllers();
 
+
+builder.Services.AddAuthorization(options => {
+    options.AddPolicy("UsernamePolicy", policy =>
+        policy.Requirements.Add(new UsernameRequirement("oogway1704@icloud.com")));
+});
+
 builder.Services.AddSqlite<FSIPlannerDbContext>("Data Source = FSIPlanner.db");
+
+
+builder.Services.AddSingleton<IAuthorizationHandler, UsernameRequirementHandler>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAssetRepository, AssetRepository>();
 builder.Services.AddScoped<IDemographicsRepository, DemographicsRepository>();
@@ -78,39 +88,39 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
-using(var scope = app.Services.CreateScope())
-{
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+// using(var scope = app.Services.CreateScope())
+// {
+//     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-    var roles = new[]{"Admin", "User", "Manager"};
+//     var roles = new[]{"Admin", "User", "Manager"};
 
-    foreach(var role in roles)
-    {
-        if(!await roleManager.RoleExistsAsync(role))
-        {
-            await roleManager.CreateAsync(new IdentityRole(role));
-        }
-    }
-}
-using(var scope = app.Services.CreateScope())
-{
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+//     foreach(var role in roles)
+//     {
+//         if(!await roleManager.RoleExistsAsync(role))
+//         {
+//             await roleManager.CreateAsync(new IdentityRole(role));
+//         }
+//     }
+// }
+// using(var scope = app.Services.CreateScope())
+// {
+//     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
-    string email = "isaacm@mutualmail.com";
-    string password = "Test1234!";
+//     string email = "isaacm@mutualmail.com";
+//     string password = "Test1234!";
 
-    if(await userManager.FindByEmailAsync(email) == null)
-    {
-        var user = new IdentityUser();
-        user.UserName = email;
-        user.Email = email;
-        user.EmailConfirmed = true;
+//     if(await userManager.FindByEmailAsync(email) == null)
+//     {
+//         var user = new IdentityUser();
+//         user.UserName = email;
+//         user.Email = email;
+//         user.EmailConfirmed = true;
 
-        await userManager.CreateAsync(user, password);
+//         await userManager.CreateAsync(user, password);
 
-        await userManager.AddToRoleAsync(user, "Admin");
-    }
-}
+//         await userManager.AddToRoleAsync(user, "Admin");
+//     }
+// }
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
