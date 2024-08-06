@@ -32,6 +32,7 @@ public class UserRepository : IUserRepository
         var claims = new Claim[]
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
+            new Claim(JwtRegisteredClaimNames.Name, user.UserName ?? ""),
             new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName ?? ""),
             new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName ?? "")
         };

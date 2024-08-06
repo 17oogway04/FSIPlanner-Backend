@@ -71,8 +71,7 @@ public class UserController : ControllerBase
 
     
     [HttpGet]
-    // [Authorize()]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(Policy = "UsernamePolicy")]
     public ActionResult<IEnumerable<User>> GetAllUsers()
     {
         return Ok(_userRepository.GetAllUsers());
