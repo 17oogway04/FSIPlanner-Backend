@@ -59,6 +59,11 @@ public class FSIPlannerDbContext: IdentityDbContext<IdentityUser>
 
         modelBuilder.Entity<Demographics>(entity => {
             entity.HasKey(e => e.DemographicsId);
+            entity.Property(e => e.Spouse);
+            entity.Property(e => e.C1);
+            entity.Property(e => e.C2);
+            entity.Property(e => e.C3);
+            entity.Property(e => e.C4);
             entity.Property(e => e.SocialSecurity);
             entity.Property(e => e.DriversLicense);
             entity.Property(e => e.IssueDate);
