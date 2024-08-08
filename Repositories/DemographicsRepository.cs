@@ -57,6 +57,11 @@ public class DemographicsRepository : IDemographicsRepository
         var originalDemo = _context.Demographics.Find(newDemographic.DemographicsId);
         if(originalDemo != null)
         {
+            originalDemo.Spouse = newDemographic.Spouse;
+            originalDemo.C1 = newDemographic.C1;
+            originalDemo.C2 = newDemographic.C2;
+            originalDemo.C3 = newDemographic.C3;
+            originalDemo.C4 = newDemographic.C4;
             originalDemo.SocialSecurity = newDemographic.SocialSecurity;
             originalDemo.DriversLicense = newDemographic.DriversLicense;
             originalDemo.IssueDate = newDemographic.IssueDate;
