@@ -56,7 +56,7 @@ namespace fsiplanner_backend.Controllers
         }
 
         [HttpGet]
-        [Route("by-demographicsId{demographicsId}")]
+        [Route("{demographicsId}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public ActionResult<Demographics> GetDemographicsById(int demographicId)
         {
@@ -83,7 +83,7 @@ namespace fsiplanner_backend.Controllers
         }
 
         [HttpPut]
-        [Route("demographicUsername/{username}")]
+        [Route("{demographicId:int}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public ActionResult<Demographics> UpdateDemographic(Demographics demographics)
         {
