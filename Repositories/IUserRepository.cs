@@ -9,5 +9,6 @@ public interface IUserRepository
     User GetCurrentUser();
     User GetUserById(int user);
     IEnumerable<User> GetAllUsers();
-    Task<User?> GetUserByUsername(string username);
+   User GetUserByName(string name);
+   Task<User?> GetUserByUsername(string username);
 }
