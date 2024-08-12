@@ -71,11 +71,10 @@ public class UserRepository : IUserRepository
         return _context.User.SingleOrDefault(p => p.UserId == user);
     }
 
-    public async Task<User?> GetUserByUsername(string username)
+    public User GetUserByName(string name)
     {
-        return await _context.User
-                .Where(x => x.UserName == username)
-                .SingleOrDefaultAsync();
+        return _context.User.SingleOrDefault(p => p.FirstName == name);
+               
     }
 
     public string SignIn(string username, string password)
@@ -93,5 +92,12 @@ public class UserRepository : IUserRepository
         }
         
         return BuildToken(user);
+    }
+
+    public async Task<User?> GetUserByUsername(string username)
+    {
+        return await _context.User
+                .Where(x => x.UserName == username)
+                .SingleOrDefaultAsync();
     }
 }

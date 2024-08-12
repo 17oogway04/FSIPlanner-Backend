@@ -7,92 +7,105 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace fsiplanner_backend.Controllers
 {
-[ApiController]
-[Route("api/[controller]")]
-public class UserController : ControllerBase
-{
-    private readonly ILogger<UserController> _logger;
-    private readonly IUserRepository _userRepository;
-
-    public UserController(ILogger<UserController> logger, IUserRepository repository)
+    [ApiController]
+    [Route("api/[controller]")]
+    public class UserController : ControllerBase
     {
-        _logger = logger;
-        _userRepository = repository;
-    }
+        private readonly ILogger<UserController> _logger;
+        private readonly IUserRepository _userRepository;
 
-    [HttpPost]
-    [Route("register")]
-    [Authorize(Policy = "UsernamePolicy")]
-    public ActionResult CreateUser(User user)
-    {
-        if(user == null || !ModelState.IsValid)
+        public UserController(ILogger<UserController> logger, IUserRepository repository)
         {
-            return BadRequest();
+            _logger = logger;
+            _userRepository = repository;
         }
 
-        _userRepository.CreateUser(user);
-        return NoContent();
-    }
-
-    [HttpGet]
-    [Route("login")]
-    public ActionResult<string> SignIn(string username, string password)
-    {
-        if(string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+        [HttpPost]
+        [Route("register")]
+        [Authorize(Policy = "UsernamePolicy")]
+        public ActionResult CreateUser(User user)
         {
-            return BadRequest();
+            if (user == null || !ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            _userRepository.CreateUser(user);
+            return NoContent();
         }
 
-        var token = _userRepository.SignIn(username, password);
-
-        if(string.IsNullOrWhiteSpace(token))
+        [HttpGet]
+        [Route("login")]
+        public ActionResult<string> SignIn(string username, string password)
         {
-            return Unauthorized();
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            {
+                return BadRequest();
+            }
+
+            var token = _userRepository.SignIn(username, password);
+
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                return Unauthorized();
+            }
+
+            return Ok(token);
         }
 
-        return Ok(token);
-    }
-
-    [HttpGet]
-    [Route("current")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public ActionResult GetCurrentUser()
-    {
-        bool isLoggedIn = User.Identity!.IsAuthenticated;
-        if(!isLoggedIn)
+        [HttpGet]
+        [Route("current")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public ActionResult GetCurrentUser()
         {
-            return NotFound();
+            bool isLoggedIn = User.Identity!.IsAuthenticated;
+            if (!isLoggedIn)
+            {
+                return NotFound();
+            }
+
+            var id = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value!);
+            User currentUser = _userRepository.GetUserById(id);
+
+            return Ok(currentUser);
         }
 
-        var id = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value!);
-        User currentUser = _userRepository.GetUserById(id);
-        
-        return Ok(currentUser);
-    }
 
-    
-    [HttpGet]
-    [Authorize(Policy = "UsernamePolicy")]
-    public ActionResult<IEnumerable<User>> GetAllUsers()
-    {
-        return Ok(_userRepository.GetAllUsers());
-    }
-    
-    [HttpGet]
-    [Route("{username}")]    
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public async Task<ActionResult<User>> GetUserByUsername(string username)
-    {
-        var name = _userRepository.GetUserByUsername(username);
-        if(name == null)
+        [HttpGet]
+        [Authorize(Policy = "UsernamePolicy")]
+        public ActionResult<IEnumerable<User>> GetAllUsers()
         {
-            return NotFound();
+            return Ok(_userRepository.GetAllUsers());
         }
 
-        return Ok(await name);
-    }
+        [HttpGet]
+        [Route("{name}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<User>> GetUserByName(string name)
+        {
+            var names = _userRepository.GetUserByName(name);
+            if (name == null)
+            {
+                return NotFound();
+            }
 
-    
-}
+            return Ok(names);
+        }
+
+        [HttpGet]
+        [Route("by-username/{username}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<User>> GetUserByUsername(string username)
+        {
+            var name = _userRepository.GetUserByUsername(username);
+            if (name == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(await name);
+        }
+
+    }
 
 }
