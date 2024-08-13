@@ -71,9 +71,11 @@ public class UserRepository : IUserRepository
         return _context.User.SingleOrDefault(p => p.UserId == user);
     }
 
-    public User GetUserByName(string name)
+    public async Task<IEnumerable<User?>> GetUserByName(string name)
     {
-        return _context.User.SingleOrDefault(p => p.FirstName == name);
+        return await _context.User
+            .Where(x => x.FirstName == name)
+            .ToListAsync();
                
     }
 

@@ -81,9 +81,9 @@ namespace fsiplanner_backend.Controllers
         [HttpGet]
         [Route("{name}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<User>> GetUserByName(string name)
+        public async Task<ActionResult<IEnumerable<User>>> GetUserByName(string name)
         {
-            var names = _userRepository.GetUserByName(name);
+            IEnumerable<User> names = (IEnumerable<User>) await _userRepository.GetUserByName(name);
             if (name == null)
             {
                 return NotFound();
