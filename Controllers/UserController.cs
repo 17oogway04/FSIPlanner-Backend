@@ -105,6 +105,19 @@ namespace fsiplanner_backend.Controllers
 
             return Ok(await name);
         }
+        [HttpGet]
+        [Route("by-userId/{id:int}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public ActionResult<User> GetUserByUserId(int userId)
+        {
+            var user = _userRepository.GetUserById(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
+        }
 
     }
 
