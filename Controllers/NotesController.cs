@@ -41,7 +41,7 @@ namespace fsiplanner_backend.Controllers
         }
 
         [HttpGet]
-        [Route("by-userId{userId}")]
+        [Route("by-userId/{userId}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<IEnumerable<Notes>>> GetNotesByUserId(int userId)
         {
@@ -54,7 +54,7 @@ namespace fsiplanner_backend.Controllers
         }
 
         [HttpGet]
-        [Route("by-notesId{notesId}")]
+        [Route("by-notesId/{notesId}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public ActionResult<Notes> GetNotesById(int notesId)
         {
@@ -83,7 +83,7 @@ namespace fsiplanner_backend.Controllers
         }
 
         [HttpPut]
-        [Route("{notesId:int}")]
+        [Route("edit-note{notesId:int}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public ActionResult<Notes> UpdateNote(Notes notes)
         {
