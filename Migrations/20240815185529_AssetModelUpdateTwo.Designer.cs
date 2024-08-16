@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using fsiplanner_backend.Migrations;
 
@@ -10,9 +11,11 @@ using fsiplanner_backend.Migrations;
 namespace fsiplanner_backend.Migrations
 {
     [DbContext(typeof(FSIPlannerDbContext))]
-    partial class FSIPlannerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240815185529_AssetModelUpdateTwo")]
+    partial class AssetModelUpdateTwo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.7");
@@ -224,7 +227,6 @@ namespace fsiplanner_backend.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Bucket")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Custodian")
@@ -232,10 +234,6 @@ namespace fsiplanner_backend.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("MaturityDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("RateOfReturn")

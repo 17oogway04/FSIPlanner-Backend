@@ -42,7 +42,8 @@ public class FSIPlannerDbContext: IdentityDbContext<IdentityUser>
             entity.Property(e => e.MaturityDate);
             entity.Property(e => e.Balance).IsRequired();
             entity.Property(e => e.Type).IsRequired();
-            entity.Property(e => e.Bucket);
+            entity.Property(e => e.Bucket).IsRequired();
+            entity.Property(e => e.Name).IsRequired();
             entity.Property(e => e.Username);
             //matching up users to their asset page
             entity.HasIndex(e => e.UserId);
@@ -53,6 +54,7 @@ public class FSIPlannerDbContext: IdentityDbContext<IdentityUser>
             entity.HasKey(e => e.BucketId);
             entity.Property(e => e.Type);
             entity.Property(e => e.Balance);
+            entity.Property(e => e.Username);
             entity.HasIndex(e => e.UserId);
             entity.Property(e => e.UserId).IsRequired();
         });
