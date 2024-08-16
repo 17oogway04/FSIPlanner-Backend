@@ -1,3 +1,4 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using fsiplanner_backend.Migrations;
 using fsiplanner_backend.Models;
@@ -111,7 +112,13 @@ namespace fsiplanner_backend.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<IEnumerable<BucketSummary>>> GetBuckets()
         {
+            var username = User.FindFirst(JwtRegisteredClaimNames.Name)?.Value;
+            if(username == null)
+            {
+                return Unauthorized();
+            }
             var summaries = await _context.Asset
+                .Where(a => a.Username == username)
                 .GroupBy(a => a.Bucket)
                 .Select(g => new BucketSummary
                 {

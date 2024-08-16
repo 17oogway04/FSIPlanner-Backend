@@ -28,6 +28,10 @@ public class Assets
     [Required]
     public string? Type {get; set;}
 
+    [Required]
+    public string? Name{get; set;} //spend, save, or invest
+
+    [Required]
     public string? Bucket {get; set;}
     public string? Username {get; set;}
 
@@ -42,6 +46,8 @@ public class BucketSummary
     public string? Type {get; set;}
     public string? Bucket {get; set;}
     public int? Balance {get; set;}
+
+    public string? Username{ get; set;}
     [ForeignKey("User")]
     public int UserId {get; set;}
 }
