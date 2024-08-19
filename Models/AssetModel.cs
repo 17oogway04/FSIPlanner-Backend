@@ -29,7 +29,7 @@ public class Assets
     public string? Type {get; set;}
 
     [Required]
-    public string? Name{get; set;} //spend, save, or invest
+    public string? AssetName{get; set;} //spend, save, or invest
 
     [Required]
     public string? Bucket {get; set;}

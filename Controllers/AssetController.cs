@@ -51,8 +51,8 @@ namespace fsiplanner_backend.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<IEnumerable<Assets>>> GetAssetsByUserId(int userId)
         {
-            IEnumerable<Assets> asset = (IEnumerable<Assets>) await _assetRepository.GetAssetsByUserId(userId);
-            if(asset == null || !asset.Any())
+            IEnumerable<Assets> asset = (IEnumerable<Assets>)await _assetRepository.GetAssetsByUserId(userId);
+            if (asset == null || !asset.Any())
             {
                 return NotFound();
             }
@@ -108,15 +108,19 @@ namespace fsiplanner_backend.Controllers
             _assetRepository.DeleteAsset(assetId);
             return NoContent();
         }
-        [HttpGet("buckets")]
+        [HttpGet("buckets/{username?}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<IEnumerable<BucketSummary>>> GetBuckets()
+        public async Task<ActionResult<IEnumerable<BucketSummary>>> GetBuckets(string? username = null)
         {
-            var username = User.FindFirst(JwtRegisteredClaimNames.Name)?.Value;
-            if(username == null)
+            if (username == null)
             {
-                return Unauthorized();
+                username = User.FindFirst(JwtRegisteredClaimNames.Name)?.Value;
+                if (username == null)
+                {
+                    return Unauthorized();
+                }
             }
+
             var summaries = await _context.Asset
                 .Where(a => a.Username == username)
                 .GroupBy(a => a.Bucket)
