@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("fsiplanner-backend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c8d26b409a21006b11d9f8e7d1d7c3e25bea26d5")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+48dfab6f7e9245b0cd39a37f809d7aa32a969a48")]
 [assembly: System.Reflection.AssemblyProductAttribute("fsiplanner-backend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("fsiplanner-backend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

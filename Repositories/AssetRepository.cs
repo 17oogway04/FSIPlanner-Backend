@@ -69,6 +69,7 @@ public class AssetRepository : IAssetRepository
             originalAsset.TaxStructure = newAsset.TaxStructure;
             originalAsset.ValuationDate = newAsset.ValuationDate;
             originalAsset.Type = newAsset.Type;
+            originalAsset.AssetName = newAsset.AssetName;
             _context.SaveChanges();
         }
 
