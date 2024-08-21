@@ -28,7 +28,6 @@ public class Assets
     [Required]
     public string? Type {get; set;}
 
-    [Required]
     public string? AssetName{get; set;} //spend, save, or invest
 
     [Required]
