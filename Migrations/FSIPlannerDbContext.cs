@@ -5,24 +5,27 @@ using Microsoft.EntityFrameworkCore;
 
 namespace fsiplanner_backend.Migrations;
 
-public class FSIPlannerDbContext: IdentityDbContext<IdentityUser>
+public class FSIPlannerDbContext : IdentityDbContext<IdentityUser>
 {
     public FSIPlannerDbContext(DbContextOptions<FSIPlannerDbContext> options)
-    : base(options){}
- public DbSet<User> User { get; set;}
- public DbSet<Assets> Asset {get; set;}
- public DbSet<Demographics> Demographics {get; set;}
- public DbSet<DisabilityInsurance> DisabilityIns {get; set;}
- public DbSet<Liabilities> Liabilites {get; set;}
- public DbSet<Life> Life {get; set;}
- public DbSet<PC> PC {get; set;}
- public DbSet<Notes> Notes {get; set;}
+    : base(options) { }
+    public DbSet<User> User { get; set; }
+    public DbSet<Assets> Asset { get; set; }
+    public DbSet<Demographics> Demographics { get; set; }
+    public DbSet<DisabilityInsurance> DisabilityIns { get; set; }
+    public DbSet<Liabilities> Liabilites { get; set; }
+    public DbSet<Life> Life { get; set; }
+    public DbSet<PC> PC { get; set; }
+    public DbSet<Notes> Notes { get; set; }
+    public DbSet<Balance> Balances { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<User>(entity => {
+        modelBuilder.Entity<User>(entity =>
+        {
             entity.HasKey(e => e.UserId);
             entity.Property(e => e.FirstName).IsRequired();
             entity.Property(e => e.LastName).IsRequired();
@@ -32,7 +35,8 @@ public class FSIPlannerDbContext: IdentityDbContext<IdentityUser>
             entity.Property(e => e.ProfilePicture);
         });
 
-        modelBuilder.Entity<Assets>(entity => {
+        modelBuilder.Entity<Assets>(entity =>
+        {
             entity.HasKey(e => e.AssetId);
             entity.Property(e => e.Custodian).IsRequired();
             entity.Property(e => e.AccountNumber).IsRequired();
@@ -50,7 +54,37 @@ public class FSIPlannerDbContext: IdentityDbContext<IdentityUser>
             entity.Property(e => e.UserId).IsRequired();
         });
 
-        modelBuilder.Entity<BucketSummary>(entity => {
+        modelBuilder.Entity<Balance>(entity =>
+        {
+            entity.HasKey(e => e.BalanceId);
+            entity.Property(e => e.Type1);
+            entity.Property(e => e.Type2);
+            entity.Property(e => e.Type3);
+            entity.Property(e => e.Type4);
+            entity.Property(e => e.Type5);
+            entity.Property(e => e.Type6);
+            entity.Property(e => e.Type7);
+            entity.Property(e => e.Type8);
+            entity.Property(e => e.Type9);
+            entity.Property(e => e.Type10);
+            entity.Property(e => e.Type11);
+            entity.Property(e => e.Type12);
+            entity.Property(e => e.Type13);
+            entity.Property(e => e.Type14);
+            entity.Property(e => e.Type15);
+            entity.Property(e => e.Type16);
+            entity.Property(e => e.Type17);
+            entity.Property(e => e.Type18);
+            entity.Property(e => e.Type19);
+            entity.Property(e => e.Type20);
+            entity.Property(e => e.Type21);
+            entity.Property(e => e.Type22);
+            entity.HasIndex(e => e.UserId);
+            entity.Property(e => e.UserId).IsRequired();
+        });
+
+        modelBuilder.Entity<BucketSummary>(entity =>
+        {
             entity.HasKey(e => e.BucketId);
             entity.Property(e => e.Type);
             entity.Property(e => e.Balance);
@@ -59,7 +93,8 @@ public class FSIPlannerDbContext: IdentityDbContext<IdentityUser>
             entity.Property(e => e.UserId).IsRequired();
         });
 
-        modelBuilder.Entity<Demographics>(entity => {
+        modelBuilder.Entity<Demographics>(entity =>
+        {
             entity.HasKey(e => e.DemographicsId);
             entity.Property(e => e.Spouse);
             entity.Property(e => e.C1);
@@ -85,7 +120,8 @@ public class FSIPlannerDbContext: IdentityDbContext<IdentityUser>
             entity.Property(e => e.UserId).IsRequired();
         });
 
-        modelBuilder.Entity<Liabilities>(entity => {
+        modelBuilder.Entity<Liabilities>(entity =>
+        {
             entity.HasKey(e => e.LiabilitiesId);
             entity.Property(e => e.Type);
             entity.Property(e => e.Description);
@@ -100,7 +136,8 @@ public class FSIPlannerDbContext: IdentityDbContext<IdentityUser>
             entity.Property(e => e.UserId).IsRequired();
         });
 
-        modelBuilder.Entity<Life>(entity => {
+        modelBuilder.Entity<Life>(entity =>
+        {
             entity.HasKey(e => e.LifeId);
             entity.Property(e => e.PolicyName);
             entity.Property(e => e.PolicyType);
@@ -119,7 +156,8 @@ public class FSIPlannerDbContext: IdentityDbContext<IdentityUser>
             entity.Property(e => e.UserId).IsRequired();
         });
 
-        modelBuilder.Entity<PC>(entity => {
+        modelBuilder.Entity<PC>(entity =>
+        {
             entity.HasKey(e => e.PCId);
             entity.Property(e => e.CompanyName);
             entity.Property(e => e.PolicyType);
@@ -133,7 +171,8 @@ public class FSIPlannerDbContext: IdentityDbContext<IdentityUser>
             entity.Property(e => e.UserId).IsRequired();
         });
 
-         modelBuilder.Entity<DisabilityInsurance>(entity => {
+        modelBuilder.Entity<DisabilityInsurance>(entity =>
+        {
             entity.HasKey(e => e.DisabilityInsId);
             entity.Property(e => e.PolicyName);
             entity.Property(e => e.PolicyType);
@@ -153,7 +192,8 @@ public class FSIPlannerDbContext: IdentityDbContext<IdentityUser>
             entity.Property(e => e.UserId).IsRequired();
         });
 
-        modelBuilder.Entity<Notes>(entity => {
+        modelBuilder.Entity<Notes>(entity =>
+        {
             entity.HasKey(e => e.NotesId);
             entity.Property(e => e.Subject).IsRequired();
             entity.Property(e => e.Description).IsRequired();

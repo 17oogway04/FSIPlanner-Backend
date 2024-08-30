@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using fsiplanner_backend.Migrations;
 
@@ -10,9 +11,11 @@ using fsiplanner_backend.Migrations;
 namespace fsiplanner_backend.Migrations
 {
     [DbContext(typeof(FSIPlannerDbContext))]
-    partial class FSIPlannerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240830174540_BalanceModel")]
+    partial class BalanceModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.7");
@@ -338,14 +341,11 @@ namespace fsiplanner_backend.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Username")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("BalanceId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Balances");
+                    b.ToTable("Balance");
                 });
 
             modelBuilder.Entity("fsiplanner_backend.Models.BucketSummary", b =>
