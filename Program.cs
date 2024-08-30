@@ -58,6 +58,7 @@ builder.Services.AddScoped<ILiabilityRepository, LiabilityRepository>();
 builder.Services.AddScoped<ILifeRepository, LifeRepository>();
 builder.Services.AddScoped<INotesRepository, NotesRepository>();
 builder.Services.AddScoped<IPCRepository, PCRepository>();
+builder.Services.AddScoped<IBalanceRepository, BalanceRepository>();
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<FSIPlannerDbContext>()
