@@ -73,5 +73,4 @@ public class BalanceRepository : IBalanceRepository
         return originalBalances!;
     }
 
-
 }

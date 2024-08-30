@@ -13,5 +13,4 @@ public interface IBalanceRepository
 
    void Delete(int balanceId);
 
-
 }
