@@ -77,7 +77,7 @@ namespace fsiplanner_backend.Controllers
             return Ok(balances);
         }
 
-        [HttpPut("balanceId:int")]
+        [HttpPut("{balanceId:int}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public ActionResult<Balance> UpdateBalances(Balance balance)
         {
