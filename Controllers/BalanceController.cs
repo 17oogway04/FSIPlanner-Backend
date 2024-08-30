@@ -64,6 +64,21 @@ namespace fsiplanner_backend.Controllers
             return Ok(balances);
         }
 
+        [HttpPost("update-balances/{username}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public ActionResult<Balance> UpdateBalances(string username)
+        {
+            try
+            {
+                var balance = _balanceRepository.UpdateBalancesForUser(username);
+                return Ok(balance);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
         [HttpGet("by-balanceId/{balanceId}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 
@@ -102,7 +117,7 @@ namespace fsiplanner_backend.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public ActionResult<Balance> CreateBalance(Balance balance)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest();
             }

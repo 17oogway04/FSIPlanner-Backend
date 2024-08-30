@@ -9,6 +9,7 @@ public interface IBalanceRepository
    IEnumerable<Balance> GetByUsername(string username);
 
    Balance Update(Balance balance);
+   Balance UpdateBalancesForUser(string username);
    Balance Add(Balance balance);
 
    void Delete(int balanceId);
