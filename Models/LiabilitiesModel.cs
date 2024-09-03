@@ -11,7 +11,7 @@ public class Liabilities
 
     public string? Description {get; set;}
 
-    public string? Balance {get; set;}
+    public int? Balance {get; set;}
 
     public string? Rate {get; set;}
 
