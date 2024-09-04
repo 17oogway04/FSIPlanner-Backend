@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using fsiplanner_backend.Migrations;
 
@@ -10,9 +11,11 @@ using fsiplanner_backend.Migrations;
 namespace fsiplanner_backend.Migrations
 {
     [DbContext(typeof(FSIPlannerDbContext))]
-    partial class FSIPlannerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240904000322_decimalModel")]
+    partial class decimalModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.7");
@@ -222,9 +225,9 @@ namespace fsiplanner_backend.Migrations
                     b.Property<string>("AssetName")
                         .HasColumnType("TEXT");
 
-                    b.Property<double?>("Balance")
+                    b.Property<decimal?>("Balance")
                         .IsRequired()
-                        .HasColumnType("REAL");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Bucket")
                         .IsRequired()
@@ -269,71 +272,71 @@ namespace fsiplanner_backend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<double?>("Type1")
-                        .HasColumnType("REAL");
+                    b.Property<decimal?>("Type1")
+                        .HasColumnType("TEXT");
 
-                    b.Property<double?>("Type10")
-                        .HasColumnType("REAL");
+                    b.Property<decimal?>("Type10")
+                        .HasColumnType("TEXT");
 
-                    b.Property<double?>("Type11")
-                        .HasColumnType("REAL");
+                    b.Property<decimal?>("Type11")
+                        .HasColumnType("TEXT");
 
-                    b.Property<double?>("Type12")
-                        .HasColumnType("REAL");
+                    b.Property<decimal?>("Type12")
+                        .HasColumnType("TEXT");
 
-                    b.Property<double?>("Type13")
-                        .HasColumnType("REAL");
+                    b.Property<decimal?>("Type13")
+                        .HasColumnType("TEXT");
 
-                    b.Property<double?>("Type14")
-                        .HasColumnType("REAL");
+                    b.Property<decimal?>("Type14")
+                        .HasColumnType("TEXT");
 
-                    b.Property<double?>("Type15")
-                        .HasColumnType("REAL");
+                    b.Property<decimal?>("Type15")
+                        .HasColumnType("TEXT");
 
-                    b.Property<double?>("Type16")
-                        .HasColumnType("REAL");
+                    b.Property<decimal?>("Type16")
+                        .HasColumnType("TEXT");
 
-                    b.Property<double?>("Type17")
-                        .HasColumnType("REAL");
+                    b.Property<decimal?>("Type17")
+                        .HasColumnType("TEXT");
 
-                    b.Property<double?>("Type18")
-                        .HasColumnType("REAL");
+                    b.Property<decimal?>("Type18")
+                        .HasColumnType("TEXT");
 
-                    b.Property<double?>("Type19")
-                        .HasColumnType("REAL");
+                    b.Property<decimal?>("Type19")
+                        .HasColumnType("TEXT");
 
-                    b.Property<double?>("Type2")
-                        .HasColumnType("REAL");
+                    b.Property<decimal?>("Type2")
+                        .HasColumnType("TEXT");
 
-                    b.Property<double?>("Type20")
-                        .HasColumnType("REAL");
+                    b.Property<decimal?>("Type20")
+                        .HasColumnType("TEXT");
 
-                    b.Property<double?>("Type21")
-                        .HasColumnType("REAL");
+                    b.Property<decimal?>("Type21")
+                        .HasColumnType("TEXT");
 
-                    b.Property<double?>("Type22")
-                        .HasColumnType("REAL");
+                    b.Property<decimal?>("Type22")
+                        .HasColumnType("TEXT");
 
-                    b.Property<double?>("Type3")
-                        .HasColumnType("REAL");
+                    b.Property<decimal?>("Type3")
+                        .HasColumnType("TEXT");
 
-                    b.Property<double?>("Type4")
-                        .HasColumnType("REAL");
+                    b.Property<decimal?>("Type4")
+                        .HasColumnType("TEXT");
 
-                    b.Property<double?>("Type5")
-                        .HasColumnType("REAL");
+                    b.Property<decimal?>("Type5")
+                        .HasColumnType("TEXT");
 
-                    b.Property<double?>("Type6")
-                        .HasColumnType("REAL");
+                    b.Property<decimal?>("Type6")
+                        .HasColumnType("TEXT");
 
-                    b.Property<double?>("Type7")
-                        .HasColumnType("REAL");
+                    b.Property<decimal?>("Type7")
+                        .HasColumnType("TEXT");
 
-                    b.Property<double?>("Type8")
-                        .HasColumnType("REAL");
+                    b.Property<decimal?>("Type8")
+                        .HasColumnType("TEXT");
 
-                    b.Property<double?>("Type9")
-                        .HasColumnType("REAL");
+                    b.Property<decimal?>("Type9")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
@@ -354,8 +357,8 @@ namespace fsiplanner_backend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<double?>("Balance")
-                        .HasColumnType("REAL");
+                    b.Property<decimal?>("Balance")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Bucket")
                         .HasColumnType("TEXT");
@@ -510,14 +513,14 @@ namespace fsiplanner_backend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<double?>("Balance")
-                        .HasColumnType("REAL");
+                    b.Property<int?>("Balance")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
-                    b.Property<double?>("Payment")
-                        .HasColumnType("REAL");
+                    b.Property<string>("Payment")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Rate")
                         .HasColumnType("TEXT");
@@ -534,8 +537,8 @@ namespace fsiplanner_backend.Migrations
                     b.Property<string>("Username")
                         .HasColumnType("TEXT");
 
-                    b.Property<double?>("Value")
-                        .HasColumnType("REAL");
+                    b.Property<string>("Value")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("LiabilitiesId");
 

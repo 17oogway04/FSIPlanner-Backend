@@ -23,7 +23,7 @@ public class Assets
     public string? MaturityDate {get; set;}
 
     [Required]
-    public int? Balance {get; set;}
+    public double? Balance {get; set;}
 
     [Required]
     public string? Type {get; set;}
@@ -44,7 +44,7 @@ public class BucketSummary
     public int BucketId {get; set;}
     public string? Type {get; set;}
     public string? Bucket {get; set;}
-    public int? Balance {get; set;}
+    public double? Balance {get; set;}
 
     public string? Username{ get; set;}
     [ForeignKey("User")]
