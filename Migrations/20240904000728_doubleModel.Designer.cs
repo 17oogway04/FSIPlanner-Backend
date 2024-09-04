@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using fsiplanner_backend.Migrations;
 
@@ -10,9 +11,11 @@ using fsiplanner_backend.Migrations;
 namespace fsiplanner_backend.Migrations
 {
     [DbContext(typeof(FSIPlannerDbContext))]
-    partial class FSIPlannerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240904000728_doubleModel")]
+    partial class doubleModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.7");
@@ -510,14 +513,14 @@ namespace fsiplanner_backend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<double?>("Balance")
-                        .HasColumnType("REAL");
+                    b.Property<int?>("Balance")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
-                    b.Property<double?>("Payment")
-                        .HasColumnType("REAL");
+                    b.Property<string>("Payment")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Rate")
                         .HasColumnType("TEXT");
@@ -534,8 +537,8 @@ namespace fsiplanner_backend.Migrations
                     b.Property<string>("Username")
                         .HasColumnType("TEXT");
 
-                    b.Property<double?>("Value")
-                        .HasColumnType("REAL");
+                    b.Property<string>("Value")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("LiabilitiesId");
 

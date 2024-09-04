@@ -11,15 +11,15 @@ public class Liabilities
 
     public string? Description {get; set;}
 
-    public int? Balance {get; set;}
+    public double? Balance {get; set;}
 
     public string? Rate {get; set;}
 
-    public string? Payment {get; set;}
+    public double? Payment {get; set;}
 
     public string? Term {get; set;}
 
-    public string? Value {get; set;}
+    public double? Value {get; set;}
         public string? Username {get; set;}
 
 
