@@ -42,8 +42,11 @@ builder.Services.AddControllers();
 
 
 builder.Services.AddAuthorization(options => {
-    options.AddPolicy("UsernamePolicy", policy =>
-        policy.Requirements.Add(new UsernameRequirement("isaacm@mutualmail.com")));
+    options.AddPolicy("UsernamePolicy", policy => 
+        policy.Requirements.Add(new UsernameRequirement(new[]{
+            "isaacm@mutualmail.com",
+            "jenniferh@mutualmail.com",
+        })));
 });
 
 builder.Services.AddSqlite<FSIPlannerDbContext>("Data Source = FSIPlanner.db");

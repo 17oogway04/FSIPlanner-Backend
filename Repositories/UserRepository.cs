@@ -34,7 +34,8 @@ public class UserRepository : IUserRepository
             new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
             new Claim(JwtRegisteredClaimNames.Name, user.UserName ?? ""),
             new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName ?? ""),
-            new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName ?? "")
+            new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName ?? ""),
+            
         };
 
         var jwt = new JwtSecurityToken(

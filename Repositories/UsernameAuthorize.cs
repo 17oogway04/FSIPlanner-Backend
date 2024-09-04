@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Authorization;
 namespace fsiplanner_backend.Repositories;
 
 public class UsernameRequirement : IAuthorizationRequirement{
-    public string Username {get;}
+    public IEnumerable<string> Username {get;}
 
-    public UsernameRequirement(string username)
+    public UsernameRequirement(IEnumerable<string> username)
     {
-       Username = username;
+       Username = username ?? throw new ArgumentNullException(nameof(username));
     }
 }
