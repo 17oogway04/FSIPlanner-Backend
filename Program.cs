@@ -92,40 +92,6 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
-// using(var scope = app.Services.CreateScope())
-// {
-//     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-
-//     var roles = new[]{"Admin", "User", "Manager"};
-
-//     foreach(var role in roles)
-//     {
-//         if(!await roleManager.RoleExistsAsync(role))
-//         {
-//             await roleManager.CreateAsync(new IdentityRole(role));
-//         }
-//     }
-// }
-// using(var scope = app.Services.CreateScope())
-// {
-//     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-
-//     string email = "isaacm@mutualmail.com";
-//     string password = "Test1234!";
-
-//     if(await userManager.FindByEmailAsync(email) == null)
-//     {
-//         var user = new IdentityUser();
-//         user.UserName = email;
-//         user.Email = email;
-//         user.EmailConfirmed = true;
-
-//         await userManager.CreateAsync(user, password);
-
-//         await userManager.AddToRoleAsync(user, "Admin");
-//     }
-// }
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -139,6 +105,7 @@ app.UseCors(builder => builder
     .AllowAnyMethod());
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
 

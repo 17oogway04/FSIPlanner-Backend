@@ -22,7 +22,7 @@ public class UserRepository : IUserRepository
         _config = config;
     }
 
-     private string BuildToken(User user)
+    private string BuildToken(User user)
     {
         var secret = _config.GetValue<string>("TokenSecret");
         var signinkey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret!));
@@ -35,7 +35,7 @@ public class UserRepository : IUserRepository
             new Claim(JwtRegisteredClaimNames.Name, user.UserName ?? ""),
             new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName ?? ""),
             new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName ?? ""),
-            
+
         };
 
         var jwt = new JwtSecurityToken(
@@ -77,23 +77,24 @@ public class UserRepository : IUserRepository
         return await _context.User
             .Where(x => x.FirstName == name)
             .ToListAsync();
-               
+
     }
 
     public string SignIn(string username, string password)
     {
         var user = _context.User.SingleOrDefault(x => x.UserName == username);
-        var verified = false; 
-        
-        if(user != null)
+        var verified = false;
+
+        if (user != null)
         {
             verified = bcrypt.Verify(password, user.Password);
         }
 
-        if(user == null || !verified){
+        if (user == null || !verified)
+        {
             return string.Empty;
         }
-        
+
         return BuildToken(user);
     }
 
@@ -102,5 +103,19 @@ public class UserRepository : IUserRepository
         return await _context.User
                 .Where(x => x.UserName == username)
                 .SingleOrDefaultAsync();
+    }
+
+    public void UpdateUser(User user)
+    {
+        var existingUser = _context.User.SingleOrDefault(u => u.UserId == user.UserId);
+        if (existingUser != null)
+        {
+            existingUser.FirstName = user.FirstName;
+            existingUser.LastName = user.LastName;
+            existingUser.UserName = user.UserName;
+            existingUser.Password = user.Password;
+            existingUser.ProfilePicture = user.ProfilePicture;
+            _context.SaveChanges();
+        }
     }
 }
