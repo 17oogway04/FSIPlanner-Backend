@@ -97,6 +97,7 @@ public class FSIPlannerDbContext : IdentityDbContext<IdentityUser>
         {
             entity.HasKey(e => e.DemographicsId);
             entity.Property(e => e.Spouse);
+            entity.Property(e => e.SpouseEmail);
             entity.Property(e => e.C1);
             entity.Property(e => e.C2);
             entity.Property(e => e.C3);
