@@ -13,11 +13,13 @@ namespace fsiplanner_backend.Controllers
     {
         private readonly ILogger<UserController> _logger;
         private readonly IUserRepository _userRepository;
+        private readonly IWebHostEnvironment _env;
 
-        public UserController(ILogger<UserController> logger, IUserRepository repository)
+        public UserController(ILogger<UserController> logger, IUserRepository repository, IWebHostEnvironment env)
         {
             _logger = logger;
             _userRepository = repository;
+            _env = env;
         }
 
         [HttpPost]
@@ -118,6 +120,44 @@ namespace fsiplanner_backend.Controllers
             }
 
             return Ok(user);
+        }
+
+        [HttpPost]
+        [Route("upload-profile-picture")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> UploadProfilePicture(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("No file uploaded.");
+            }
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value!);
+            var user = _userRepository.GetUserById(userId);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            var uploads = Path.Combine(_env.WebRootPath, "profile-pictures");
+            if (!Directory.Exists(uploads))
+            {
+                Directory.CreateDirectory(uploads);
+            }
+            var filePath = Path.Combine(uploads, file.FileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+
+            if (user != null)
+            {
+                user.ProfilePicture = $"/profile-pictures/{file.FileName}";
+                _userRepository.UpdateUser(user);
+            }
+            return Ok(new { FilePath = $"/profile-pictures/{file.FileName}" });
+
         }
 
     }
