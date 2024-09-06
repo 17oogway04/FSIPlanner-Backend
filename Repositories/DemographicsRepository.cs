@@ -58,6 +58,7 @@ public class DemographicsRepository : IDemographicsRepository
         if(originalDemo != null)
         {
             originalDemo.Spouse = newDemographic.Spouse;
+            originalDemo.SpouseEmail = newDemographic.SpouseEmail;
             originalDemo.C1 = newDemographic.C1;
             originalDemo.C2 = newDemographic.C2;
             originalDemo.C3 = newDemographic.C3;

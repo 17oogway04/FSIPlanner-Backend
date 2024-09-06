@@ -10,6 +10,9 @@ public class Demographics
     public int DemographicsId {get; set;}
 
     public string? Spouse {get; set;}
+
+    public string? SpouseEmail { get; set;}
+
     public string? C1 {get; set;}
     public string? C2 {get; set;}
     public string? C3{get; set;}
