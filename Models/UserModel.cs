@@ -19,6 +19,8 @@ public class User
     [Required]
     public string? UserName {get; set;}
 
+    public string? HashedUsername {get; set;}
+    public string? HashedUserId {get; set;}
     [Required]
     public string? Password {get; set;}
 

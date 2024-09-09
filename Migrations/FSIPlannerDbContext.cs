@@ -31,6 +31,8 @@ public class FSIPlannerDbContext : IdentityDbContext<IdentityUser>
             entity.Property(e => e.LastName).IsRequired();
             entity.Property(e => e.UserName).IsRequired();
             entity.HasIndex(x => x.UserName).IsUnique();
+            entity.Property(e => e.HashedUsername);
+            entity.Property(e => e.HashedUserId);
             entity.Property(e => e.Password).IsRequired();
             entity.Property(e => e.ProfilePicture);
         });

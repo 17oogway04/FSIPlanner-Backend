@@ -96,11 +96,13 @@ namespace fsiplanner_backend.Controllers
         }
 
         [HttpGet]
-        [Route("by-username/{username}")]
+
+        [HttpGet]
+        [Route("by-username/{hashedUsername}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<User>> GetUserByUsername(string username)
+        public async Task<ActionResult<User>> GetUserByHashedUsername(string username)
         {
-            var name = _userRepository.GetUserByUsername(username);
+            var name = _userRepository.GetUserByHashedUsername(username);
             if (name == null)
             {
                 return NotFound();
@@ -109,11 +111,11 @@ namespace fsiplanner_backend.Controllers
             return Ok(await name);
         }
         [HttpGet]
-        [Route("by-userId/{id:int}")]
+        [Route("by-userId/{hashedUserId}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public ActionResult<User> GetUserByUserId(int userId)
+        public ActionResult<User> GetUserByHashedUserId(string hashedUserId)
         {
-            var user = _userRepository.GetUserById(userId);
+            var user = _userRepository.GetUserByHashedUserId(hashedUserId);
             if (user == null)
             {
                 return NotFound();

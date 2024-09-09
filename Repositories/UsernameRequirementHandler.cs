@@ -1,4 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Cryptography;
+using System.Text;
 using Microsoft.AspNetCore.Authorization;
 
 namespace fsiplanner_backend.Repositories;
@@ -32,5 +34,20 @@ public class UsernameRequirementHandler : AuthorizationHandler<UsernameRequireme
 
         }
         return Task.CompletedTask;
+    }
+
+    private readonly string _salt = "YourSecretSalt";
+    public string HashString(string input){
+        using(var sha256 = SHA256.Create())
+        {
+            var saltedInput = input + _salt;
+            var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(saltedInput));
+            return Convert.ToBase64String(bytes);
+        }
+    }
+
+    public string DehashString(string hashedInput)
+    {
+        throw new NotImplementedException("Hashing it not reversible. Store and match hashes instead");
     }
 }

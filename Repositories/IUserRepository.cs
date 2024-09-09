@@ -12,5 +12,8 @@ public interface IUserRepository
    Task<IEnumerable<User?>> GetUserByName(string name);
    Task<User?> GetUserByUsername(string username);
 
+    Task<User?> GetUserByHashedUsername(string hashedUsername);
+
+    Task<User?> GetUserByHashedUserId(string hashedUserId);
    void UpdateUser(User user);
 }

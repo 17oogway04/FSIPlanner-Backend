@@ -3,7 +3,6 @@ using System.Security.Claims;
 using System.Text;
 using fsiplanner_backend.Migrations;
 using fsiplanner_backend.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using bcrypt = BCrypt.Net.BCrypt;
@@ -75,7 +74,7 @@ public class UserRepository : IUserRepository
     public async Task<IEnumerable<User?>> GetUserByName(string name)
     {
         return await _context.User
-            .Where(x => x.FirstName == name)
+            .Where(x => x.FirstName == name || x.LastName == name)
             .ToListAsync();
 
     }
@@ -117,5 +116,23 @@ public class UserRepository : IUserRepository
             existingUser.ProfilePicture = user.ProfilePicture;
             _context.SaveChanges();
         }
+    }
+
+    public async Task<User?> GetUserByHashedUsername(string hashedUsername)
+    {
+        var user = await _context.User
+            .Where(x => x.HashedUsername == hashedUsername)
+            .FirstOrDefaultAsync();
+            
+        return user;
+    }
+
+    public async Task<User?> GetUserByHashedUserId(string hashedUserId)
+    {
+        var user = await _context.User
+            .Where(x => x.HashedUserId == hashedUserId)
+            .FirstOrDefaultAsync();
+
+        return user;
     }
 }
