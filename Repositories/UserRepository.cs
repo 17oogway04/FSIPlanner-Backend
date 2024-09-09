@@ -75,7 +75,7 @@ public class UserRepository : IUserRepository
     public async Task<IEnumerable<User?>> GetUserByName(string name)
     {
         return await _context.User
-            .Where(x => x.FirstName == name)
+            .Where(x => x.FirstName == name || x.LastName == name)
             .ToListAsync();
 
     }
