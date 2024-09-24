@@ -5,6 +5,7 @@ using fsiplanner_backend.Migrations;
 using fsiplanner_backend.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Microsoft.IdentityModel.Tokens;
 using bcrypt = BCrypt.Net.BCrypt;
 
@@ -115,6 +116,17 @@ public class UserRepository : IUserRepository
             existingUser.UserName = user.UserName;
             existingUser.Password = user.Password;
             existingUser.ProfilePicture = user.ProfilePicture;
+            _context.SaveChanges();
+        }
+    }
+
+    public void deleteUser(string username)
+    {
+        var user = _context.User
+            .Where(x => x.UserName == username)
+            .SingleOrDefault();
+        if(user != null){
+            _context.User.Remove(user);
             _context.SaveChanges();
         }
     }

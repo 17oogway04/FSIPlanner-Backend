@@ -11,6 +11,6 @@ public interface IUserRepository
     IEnumerable<User> GetAllUsers();
    Task<IEnumerable<User?>> GetUserByName(string name);
    Task<User?> GetUserByUsername(string username);
-
+    void deleteUser(string username);
    void UpdateUser(User user);
 }
