@@ -163,9 +163,20 @@ namespace fsiplanner_backend.Controllers
         [HttpDelete]
         [Route("{username}")]
         [Authorize(Policy = "UsernamePolicy")]
-        public ActionResult DeleteUser(string username){
+        public ActionResult DeleteUser(string username)
+        {
             _userRepository.deleteUser(username);
             return NoContent();
+        }
+
+        [HttpPut]
+        [Route("{userId:int}")]
+        [Authorize(Policy = "UsernamePolicy")]
+        public ActionResult<User> UpdateUser(User user){
+            if(!ModelState.IsValid){
+                return BadRequest();
+            }
+            return Ok(_userRepository.UpdateUser(user));
         }
     }
 

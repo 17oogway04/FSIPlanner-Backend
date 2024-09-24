@@ -106,7 +106,7 @@ public class UserRepository : IUserRepository
                 .SingleOrDefaultAsync();
     }
 
-    public void UpdateUser(User user)
+    public User UpdateUser(User user)
     {
         var existingUser = _context.User.SingleOrDefault(u => u.UserId == user.UserId);
         if (existingUser != null)
@@ -118,6 +118,7 @@ public class UserRepository : IUserRepository
             existingUser.ProfilePicture = user.ProfilePicture;
             _context.SaveChanges();
         }
+        return existingUser!;
     }
 
     public void deleteUser(string username)

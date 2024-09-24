@@ -7,7 +7,6 @@ namespace fsiplanner_backend.Models;
 public class User
 {
     //JsonIgnore
-    [JsonIgnore]
     public int UserId {get; set;}
 
     [Required]
