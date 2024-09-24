@@ -160,6 +160,13 @@ namespace fsiplanner_backend.Controllers
 
         }
 
+        [HttpDelete]
+        [Route("{username}")]
+        [Authorize(Policy = "UsernamePolicy")]
+        public ActionResult DeleteUser(string username){
+            _userRepository.deleteUser(username);
+            return NoContent();
+        }
     }
 
 }
