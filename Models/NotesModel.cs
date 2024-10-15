@@ -11,7 +11,7 @@ public class Notes
     [Required]
     public string? Username {get; set;}
     public string? Description {get; set;}
-    public DateTime CreatedAt {get; set;}
+    public string? CreatedAt {get; set;}
 
     [ForeignKey("User")]
     public int UserId {get; set;}
