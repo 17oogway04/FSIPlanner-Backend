@@ -18,7 +18,7 @@ public string? Insured {get; set;}
 
 public string? Premium {get; set;}
 
-public string? CashValue {get; set;}
+public double? CashValue {get; set;}
 
 public string? DeathBenefitOne {get; set;}
 
