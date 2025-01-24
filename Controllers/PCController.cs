@@ -43,7 +43,7 @@ namespace fsiplanner_backend.Controllers
         [HttpGet]
         [Route("by-userId{userId}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<IEnumerable<PC>>> GetPCByUserId(int userId)
+        public async Task<ActionResult<IEnumerable<PC>>> GetPCByUserId(string userId)
         {
             IEnumerable<PC> pc = (IEnumerable<PC>) await _pcRepository.GetPCByUserId(userId);
             if(pc == null || !pc.Any())
@@ -75,7 +75,7 @@ namespace fsiplanner_backend.Controllers
                 return BadRequest();
             }
 
-            pc.UserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            pc.UserId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
 
             var newPC = _pcRepository.CreatePC(pc);
             return Created(nameof(GetPCById), newPC);

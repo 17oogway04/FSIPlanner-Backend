@@ -1,4 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 
 namespace fsiplanner_backend.Repositories;
@@ -9,7 +10,7 @@ public class UsernameRequirementHandler : AuthorizationHandler<UsernameRequireme
     {
         if (context.User.Identity?.IsAuthenticated == true)
         {
-            var username = context.User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Name)?.Value; // Assuming the username is stored in the Name property
+            var username = context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name || c.Type == ClaimTypes.Email || c.Type == JwtRegisteredClaimNames.Sub)?.Value; // Assuming the username is stored in the Name property
             if (username != null && requirement.Username.Contains(username))
             {
                 context.Succeed(requirement);

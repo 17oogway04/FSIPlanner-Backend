@@ -6,7 +6,7 @@ public interface IPCRepository
 {
     IEnumerable<PC> GetAllPC();
     Task<IEnumerable<PC>> GetPCByUsername(string username);
-    Task<IEnumerable<PC>> GetPCByUserId(int userId);
+    Task<IEnumerable<PC>> GetPCByUserId(string userId);
     PC GetPCById(int pcId);
     PC CreatePC(PC newPC);
     PC UpdatePC(PC newPC);

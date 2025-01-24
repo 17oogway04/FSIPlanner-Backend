@@ -45,7 +45,7 @@ namespace fsiplanner_backend.Controllers
         [HttpGet]
         [Route("by-userId{userId}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<IEnumerable<Demographics>>> GetDemographicsByUserId(int userId)
+        public async Task<ActionResult<IEnumerable<Demographics>>> GetDemographicsByUserId(string userId)
         {
             IEnumerable<Demographics> demographics = (IEnumerable<Demographics>) await _demographicsRepository.GetDemographicsByUserId(userId);
             if(demographics == null || !demographics.Any())
@@ -77,7 +77,7 @@ namespace fsiplanner_backend.Controllers
                 return BadRequest();
             }
 
-            demographics.UserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            demographics.UserId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
             var newDemographic = _demographicsRepository.CreateDemographics(demographics);
             return Created(nameof(GetDemographicsById), newDemographic);
         }

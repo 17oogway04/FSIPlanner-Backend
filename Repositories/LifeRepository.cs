@@ -41,7 +41,7 @@ public class LifeRepository : ILifeRepository
         return _context.Life.SingleOrDefault(x => x.LifeId == lifeId)!;
     }
 
-    public async Task<IEnumerable<Life>> GetLifeByUserId(int userId)
+    public async Task<IEnumerable<Life>> GetLifeByUserId(string userId)
     {
         return await _context.Life
             .Where(x => x.UserId == userId)

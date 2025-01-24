@@ -43,7 +43,7 @@ namespace fsiplanner_backend.Controllers
         [HttpGet]
         [Route("by-userId{userId}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<IEnumerable<Liabilities>>> GetLiabilityByUserId(int userId)
+        public async Task<ActionResult<IEnumerable<Liabilities>>> GetLiabilityByUserId(string userId)
         {
             IEnumerable<Liabilities> liability = (IEnumerable<Liabilities>) await _liabilityRepository.GetLiabilitiesByUserId(userId);
             if(liability == null || !liability.Any())
@@ -75,7 +75,7 @@ namespace fsiplanner_backend.Controllers
                 return BadRequest();
             }
 
-            liabilities.UserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            liabilities.UserId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
 
             var newLiability = _liabilityRepository.CreateLiability(liabilities);
             return Created(nameof(GetLiabilityById), newLiability);

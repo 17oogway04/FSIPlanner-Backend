@@ -3,7 +3,9 @@ using fsiplanner_backend.Models;
 using fsiplanner_backend.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.ObjectPool;
 
 namespace fsiplanner_backend.Controllers
 {
@@ -15,37 +17,80 @@ namespace fsiplanner_backend.Controllers
         private readonly IUserRepository _userRepository;
         private readonly IWebHostEnvironment _env;
 
-        public UserController(ILogger<UserController> logger, IUserRepository repository, IWebHostEnvironment env)
+        private readonly UserManager<User> _userManager;
+        private readonly IEmailService _emailService;
+
+        public UserController(ILogger<UserController> logger, IUserRepository repository, IWebHostEnvironment env, UserManager<User> userManager, IEmailService emailService)
         {
             _logger = logger;
             _userRepository = repository;
             _env = env;
+            _userManager = userManager;
+            _emailService = emailService;
+        }
+
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> RequestPasswordReset([FromBody] PasswordResetRequest request)
+        {
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user == null)
+            {
+                return BadRequest("User not found.");
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var resetUrl = $"https://localhost:8100.com/reset-password?token={Uri.EscapeDataString(token)}&email={request.Email}";
+
+            await _emailService.SendEmailAsync(user.Email, "Password Reset", $"Reset your password by clicking here: {resetUrl}");
+
+            return Ok("Password reset link sent to email");
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordModel model)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null) return BadRequest("User not found.");
+
+            var result = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
+            if (!result.Succeeded)
+            {
+                return BadRequest("Invalid token or password reset failed.");
+            }
+
+            return Ok("Password reset successfully");
         }
 
         [HttpPost]
         [Route("register")]
         [Authorize(Policy = "UsernamePolicy")]
-        public ActionResult CreateUser(User user)
+        public async Task<ActionResult> CreateUser([FromBody] User user, string password)
         {
             if (user == null || !ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
 
-            _userRepository.CreateUser(user);
+            var result = await _userRepository.CreateUserAsync(user, password);
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
             return NoContent();
         }
 
         [HttpGet]
         [Route("login")]
-        public ActionResult<string> SignIn(string username, string password)
+        public async Task<ActionResult<string>> SignIn(string username, string password)
         {
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
             {
-                return BadRequest();
+                return BadRequest("Username and password are required");
             }
 
-            var token = _userRepository.SignIn(username, password);
+            var token = await _userRepository.SignInAsync(username, password);
 
             if (string.IsNullOrWhiteSpace(token))
             {
@@ -66,15 +111,16 @@ namespace fsiplanner_backend.Controllers
                 return NotFound();
             }
 
-            var id = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value!);
-            User currentUser = _userRepository.GetUserById(id);
+            var id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
+            var currentUser = _userRepository.GetUserById(id);
+
 
             return Ok(currentUser);
         }
 
 
         [HttpGet]
-        [Authorize(Policy = "UsernamePolicy")]
+        // [Authorize(Policy = "UsernamePolicy")]
         public ActionResult<IEnumerable<User>> GetAllUsers()
         {
             return Ok(_userRepository.GetAllUsers());
@@ -82,7 +128,7 @@ namespace fsiplanner_backend.Controllers
 
         [HttpGet]
         [Route("{name}")]
-        [Authorize(Policy = "UsernamePolicy")]
+        // [Authorize(Policy = "UsernamePolicy")]
         // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<IEnumerable<User>>> GetUserByName(string name)
         {
@@ -111,7 +157,7 @@ namespace fsiplanner_backend.Controllers
         [HttpGet]
         [Route("by-userId/{id:int}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public ActionResult<User> GetUserByUserId(int userId)
+        public ActionResult<User> GetUserByUserId(string userId)
         {
             var user = _userRepository.GetUserById(userId);
             if (user == null)
@@ -131,8 +177,8 @@ namespace fsiplanner_backend.Controllers
             {
                 return BadRequest("No file uploaded.");
             }
-            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value!);
-            var user = _userRepository.GetUserById(userId);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
+            var user = await _userRepository.GetUserById(userId);
             if (user == null)
             {
                 return NotFound("User not found.");
@@ -150,11 +196,11 @@ namespace fsiplanner_backend.Controllers
                 await file.CopyToAsync(stream);
             }
 
-
-            if (user != null)
+            user.ProfilePicture = $"/profile-pictures/{file.FileName}";
+            var updateResult = await _userRepository.UpdateUserAsync(user);
+            if (!updateResult.Succeeded)
             {
-                user.ProfilePicture = $"/profile-pictures/{file.FileName}";
-                _userRepository.UpdateUser(user);
+                return BadRequest("Failed to update profile picture");
             }
             return Ok(new { FilePath = $"/profile-pictures/{file.FileName}" });
 
@@ -163,20 +209,31 @@ namespace fsiplanner_backend.Controllers
         [HttpDelete]
         [Route("{username}")]
         [Authorize(Policy = "UsernamePolicy")]
-        public ActionResult DeleteUser(string username)
+        public async Task<ActionResult> DeleteUser(string username)
         {
-            _userRepository.deleteUser(username);
+            var result = await _userRepository.DeleteUserAsync(username);
+            if (!result)
+            {
+                return NotFound("User not found");
+            }
             return NoContent();
         }
 
         [HttpPut]
-        [Route("{userId:int}")]
-        [Authorize(Policy = "UsernamePolicy")]
-        public ActionResult<User> UpdateUser(User user){
-            if(!ModelState.IsValid){
-                return BadRequest();
+        [Route("{username}")]
+        // [Authorize(Policy = "UsernamePolicy")]
+        public async Task<ActionResult<User>> UpdateUser([FromBody] User user)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
             }
-            return Ok(_userRepository.UpdateUser(user));
+            var result = await _userRepository.UpdateUserAsync(user);
+            if (!result.Succeeded)
+            {
+                return BadRequest("Failed to update user");
+            }
+            return Ok(user);
         }
     }
 

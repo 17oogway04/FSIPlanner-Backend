@@ -1,4 +1,6 @@
+using System.ComponentModel.Design;
 using System.Text;
+using fsiplanner_backend;
 using fsiplanner_backend.Migrations;
 using fsiplanner_backend.Models;
 using fsiplanner_backend.Repositories;
@@ -44,7 +46,7 @@ builder.Services.AddControllers();
 builder.Services.AddAuthorization(options => {
     options.AddPolicy("UsernamePolicy", policy => 
         policy.Requirements.Add(new UsernameRequirement(new[]{
-            "isaacm@mutualmail.com",
+            "isaacm",
             "jenniferh@mutualmail.com",
         })));
 });
@@ -62,10 +64,12 @@ builder.Services.AddScoped<ILifeRepository, LifeRepository>();
 builder.Services.AddScoped<INotesRepository, NotesRepository>();
 builder.Services.AddScoped<IPCRepository, PCRepository>();
 builder.Services.AddScoped<IBalanceRepository, BalanceRepository>();
-
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddTransient<IEmailService, EmailService>();
+builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<FSIPlannerDbContext>()
     .AddDefaultTokenProviders();
+
 var secretKey = builder.Configuration["TokenSecret"];
 builder.Services.AddAuthentication(options =>
 {
@@ -76,14 +80,14 @@ builder.Services.AddAuthentication(options =>
 {
     cfg.RequireHttpsMetadata = true;
     cfg.SaveToken = true;
-    cfg.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+    cfg.TokenValidationParameters = new TokenValidationParameters
     {
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!)),
         ValidateAudience = false,
         ValidateIssuer = false,
-        ValidateLifetime = false,
-        RequireExpirationTime = false,
-        ClockSkew = TimeSpan.Zero,
+        ValidateLifetime = true,
+        RequireExpirationTime = true,
+        ClockSkew = TimeSpan.FromMinutes(5),
         ValidateIssuerSigningKey = true
     };
 });
