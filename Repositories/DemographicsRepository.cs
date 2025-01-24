@@ -38,7 +38,7 @@ public class DemographicsRepository : IDemographicsRepository
         return _context.Demographics.SingleOrDefault(c => c.DemographicsId == demographicId)!;
     }
 
-    public async Task<IEnumerable<Demographics>> GetDemographicsByUserId(int userId)
+    public async Task<IEnumerable<Demographics>> GetDemographicsByUserId(string userId)
     {
         return await _context.Demographics
             .Where(x => x.UserId == userId)

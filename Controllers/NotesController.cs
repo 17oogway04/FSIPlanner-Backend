@@ -43,7 +43,7 @@ namespace fsiplanner_backend.Controllers
         [HttpGet]
         [Route("by-userId/{userId}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<IEnumerable<Notes>>> GetNotesByUserId(int userId)
+        public async Task<ActionResult<IEnumerable<Notes>>> GetNotesByUserId(string userId)
         {
             IEnumerable<Notes> note = (IEnumerable<Notes>) await _notesRepository.GetNotesByUserId(userId);
             if(note == null || !note.Any())
@@ -76,7 +76,7 @@ namespace fsiplanner_backend.Controllers
                 return BadRequest();
             }
 
-            note.UserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            note.UserId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
 
             var newNote = _notesRepository.CreateNote(note);
             return Created(nameof(GetNotesById), newNote);

@@ -40,7 +40,7 @@ public class PCRepository : IPCRepository
         return _context.PC.SingleOrDefault(x => x.PCId == pcId)!;
     }
 
-    public async Task<IEnumerable<PC>> GetPCByUserId(int userId)
+    public async Task<IEnumerable<PC>> GetPCByUserId(string userId)
     {
         return await _context.PC
             .Where(x => x.UserId == userId)

@@ -41,7 +41,7 @@ public class DisabilityInsRepository : IDisabilityInsRepository
         return _context.DisabilityIns.SingleOrDefault(x => x.DisabilityInsId == disabilityInsId)!;
     }
 
-    public async Task<IEnumerable<DisabilityInsurance>> GetDisabilityInsByUserId(int userId)
+    public async Task<IEnumerable<DisabilityInsurance>> GetDisabilityInsByUserId(string userId)
     {
         return await _context.DisabilityIns
             .Where(x => x.UserId == userId)

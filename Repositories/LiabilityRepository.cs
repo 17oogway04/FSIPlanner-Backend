@@ -39,7 +39,7 @@ public class LiabilityRepository : ILiabilityRepository
         return _context.Liabilites.SingleOrDefault(l => l.LiabilitiesId == liabilityId)!;
     }
 
-    public async Task<IEnumerable<Liabilities>> GetLiabilitiesByUserId(int userId)
+    public async Task<IEnumerable<Liabilities>> GetLiabilitiesByUserId(string userId)
     {
         return await _context.Liabilites
             .Where(x => x.UserId == userId)

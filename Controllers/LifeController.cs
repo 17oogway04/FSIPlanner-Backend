@@ -44,7 +44,7 @@ namespace fsiplanner_backend.Controllers
         [HttpGet]
         [Route("by-userId{userId}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<IEnumerable<Life>>> GetLifeByUserId(int userId)
+        public async Task<ActionResult<IEnumerable<Life>>> GetLifeByUserId(string userId)
         {
             IEnumerable<Life> life = (IEnumerable<Life>) await _lifeRepository.GetLifeByUserId(userId);
             if(life == null || !life.Any())
@@ -77,7 +77,7 @@ namespace fsiplanner_backend.Controllers
                 return BadRequest();
             }
 
-            life.UserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            life.UserId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
             
             var newLife = _lifeRepository.CreateLife(life);
             return Created(nameof(GetLifeById), newLife);

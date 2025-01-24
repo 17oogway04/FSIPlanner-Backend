@@ -14,5 +14,5 @@ public class Notes
     public string? CreatedAt {get; set;}
 
     [ForeignKey("User")]
-    public int UserId {get; set;}
+    public string UserId {get; set;}
 }

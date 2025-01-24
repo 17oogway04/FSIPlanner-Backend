@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using fsiplanner_backend.Migrations;
 
@@ -10,9 +11,11 @@ using fsiplanner_backend.Migrations;
 namespace fsiplanner_backend.Migrations
 {
     [DbContext(typeof(FSIPlannerDbContext))]
-    partial class FSIPlannerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241031203224_UserIdToString")]
+    partial class UserIdToString
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.7");
@@ -642,6 +645,10 @@ namespace fsiplanner_backend.Migrations
 
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PasswordHash")

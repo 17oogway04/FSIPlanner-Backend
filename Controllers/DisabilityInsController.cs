@@ -43,7 +43,7 @@ namespace fsiplanner_backend.Controllers
         [HttpGet]
         [Route("by-userId{userId}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<IEnumerable<DisabilityInsurance>>> GetDisabilityByUserId(int userId)
+        public async Task<ActionResult<IEnumerable<DisabilityInsurance>>> GetDisabilityByUserId(string userId)
         {
             IEnumerable<DisabilityInsurance> disability = (IEnumerable<DisabilityInsurance>) await _disabilityInsRepository.GetDisabilityInsByUserId(userId);
             if(disability == null || !disability.Any())
@@ -75,7 +75,7 @@ namespace fsiplanner_backend.Controllers
                 return BadRequest();
             }
 
-            disabilityInsurance.UserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            disabilityInsurance.UserId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
             var newDisabilityIns = _disabilityInsRepository.CreateDisabilityIns(disabilityInsurance);
             return Created(nameof(GetDisabilityById), newDisabilityIns);
         }

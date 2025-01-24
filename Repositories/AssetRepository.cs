@@ -41,7 +41,7 @@ public class AssetRepository : IAssetRepository
         return _context.Asset.SingleOrDefault(c => c.AssetId == assetId)!;
     }
 
-    public async Task<IEnumerable<Assets>> GetAssetsByUserId(int userId)
+    public async Task<IEnumerable<Assets>> GetAssetsByUserId(string userId)
     {
         return await _context.Asset
             .Where(x => x.UserId == userId)

@@ -49,7 +49,7 @@ namespace fsiplanner_backend.Controllers
         [HttpGet]
         [Route("by-userId{userId}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<IEnumerable<Assets>>> GetAssetsByUserId(int userId)
+        public async Task<ActionResult<IEnumerable<Assets>>> GetAssetsByUserId(string userId)
         {
             IEnumerable<Assets> asset = (IEnumerable<Assets>)await _assetRepository.GetAssetsByUserId(userId);
             if (asset == null || !asset.Any())
@@ -82,7 +82,7 @@ namespace fsiplanner_backend.Controllers
                 return BadRequest();
             }
 
-            asset.UserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            asset.UserId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
 
             var newAsset = _assetRepository.CreateAsset(asset);
             return Created(nameof(GetAsset), newAsset);

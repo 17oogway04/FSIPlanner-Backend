@@ -39,7 +39,7 @@ public class NotesRepository : INotesRepository
         return _context.Notes.SingleOrDefault(c => c.NotesId == noteId);
     }
 
-    public async Task<IEnumerable<Notes>> GetNotesByUserId(int userId)
+    public async Task<IEnumerable<Notes>> GetNotesByUserId(string userId)
     {
         return await _context.Notes
             .Where(x => x.UserId == userId)

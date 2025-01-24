@@ -6,7 +6,7 @@ public interface ILifeRepository
 {
     IEnumerable<Life> GetAllLife();
     Task<IEnumerable<Life>> GetLifeByUsername(string username);
-    Task<IEnumerable<Life>> GetLifeByUserId(int userId);
+    Task<IEnumerable<Life>> GetLifeByUserId(string userId);
     Life GetLifeById (int lifeId);
     Life CreateLife(Life newLife);
     Life UpdateLife(Life newLife);

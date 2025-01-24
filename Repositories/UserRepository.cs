@@ -16,11 +16,38 @@ public class UserRepository : IUserRepository
 {
     private static FSIPlannerDbContext _context;
     private static IConfiguration _config;
+    private readonly UserManager<User> _userManager;
+    private readonly PasswordHasher<User> _passwordHasher;
 
-    public UserRepository(FSIPlannerDbContext context, IConfiguration config)
+
+    public UserRepository(FSIPlannerDbContext context, IConfiguration config, UserManager<User> userManager)
     {
         _context = context;
         _config = config;
+        _userManager = userManager;
+        _passwordHasher = new PasswordHasher<User>();
+    }
+
+
+    public async Task<bool> ResetUserPasswordAsync(string email, string token, string newPassword)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user == null)
+        {
+            return false;
+        }
+
+        // var isTokenValid = await _userManager.VerifyUserTokenAsync(user, TokenOptions.DefaultProvider, "ResetPassword", token);
+        // if (!isTokenValid)
+        // {
+        //     return false;
+        // }
+
+        // user.PasswordHash = _passwordHasher.HashPassword(user, newPassword);
+
+
+        var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
+        return result.Succeeded;
     }
 
     private string BuildToken(User user)
@@ -32,7 +59,7 @@ public class UserRepository : IUserRepository
 
         var claims = new Claim[]
         {
-            new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
+            new Claim(JwtRegisteredClaimNames.Sub, user.Id),
             new Claim(JwtRegisteredClaimNames.Name, user.UserName ?? ""),
             new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName ?? ""),
             new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName ?? ""),
@@ -48,14 +75,10 @@ public class UserRepository : IUserRepository
         var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
         return encodedJwt;
     }
-    public User CreateUser(User user)
+    public async Task<IdentityResult> CreateUserAsync(User user, string password)
     {
-        var passwordHash = bcrypt.HashPassword(user.Password);
-        user.Password = passwordHash;
-
-        _context?.Add(user);
-        _context?.SaveChanges();
-        return user;
+        var result = await _userManager.CreateAsync(user, password);
+        return result;
     }
 
     public IEnumerable<User> GetAllUsers()
@@ -68,35 +91,12 @@ public class UserRepository : IUserRepository
         return _context.User.SingleOrDefault();
     }
 
-    public User GetUserById(int user)
-    {
-        return _context.User.SingleOrDefault(p => p.UserId == user);
-    }
-
     public async Task<IEnumerable<User?>> GetUserByName(string name)
     {
         return await _context.User
             .Where(x => x.FirstName == name || x.LastName == name)
             .ToListAsync();
 
-    }
-
-    public string SignIn(string username, string password)
-    {
-        var user = _context.User.SingleOrDefault(x => x.UserName == username);
-        var verified = false;
-
-        if (user != null)
-        {
-            verified = bcrypt.Verify(password, user.Password);
-        }
-
-        if (user == null || !verified)
-        {
-            return string.Empty;
-        }
-
-        return BuildToken(user);
     }
 
     public async Task<User?> GetUserByUsername(string username)
@@ -106,29 +106,56 @@ public class UserRepository : IUserRepository
                 .SingleOrDefaultAsync();
     }
 
-    public User UpdateUser(User user)
+    public async Task<IdentityResult> UpdateUserAsync(User user)
     {
-        var existingUser = _context.User.SingleOrDefault(u => u.UserId == user.UserId);
-        if (existingUser != null)
+        var existingUser = await _userManager.FindByIdAsync(user.Id);
+        if (existingUser == null)
         {
-            existingUser.FirstName = user.FirstName;
-            existingUser.LastName = user.LastName;
-            existingUser.UserName = user.UserName;
-            existingUser.Password = user.Password;
-            existingUser.ProfilePicture = user.ProfilePicture;
-            _context.SaveChanges();
+            return IdentityResult.Failed(new IdentityError { Description = "User not found" });
         }
-        return existingUser!;
+
+        existingUser.FirstName = user.FirstName;
+        existingUser.LastName = user.LastName;
+        existingUser.ProfilePicture = user.ProfilePicture;
+        var result = await _userManager.UpdateAsync(existingUser);
+        return result;
     }
 
-    public void deleteUser(string username)
+    public async Task<bool> DeleteUserAsync(string username)
     {
-        var user = _context.User
-            .Where(x => x.UserName == username)
-            .SingleOrDefault();
-        if(user != null){
-            _context.User.Remove(user);
-            _context.SaveChanges();
+       var user = await _context.User 
+        .Where(x => x.UserName == username)
+        .SingleOrDefaultAsync();
+
+        if(user == null)
+        {
+            return false;
         }
+
+        _context.User.Remove(user);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<User> GetUserById(string id)
+    {
+        return await _context.User.FindAsync(id);
+    }
+
+    public async Task<string> SignInAsync(string username, string password)
+    {
+        var user = await _userManager.FindByNameAsync(username);
+        if (user == null)
+        {
+            return string.Empty;
+        }
+        var isPasswordValid = await _userManager.CheckPasswordAsync(user, password);
+        if (!isPasswordValid)
+        {
+            return string.Empty;
+        }
+
+        return BuildToken(user!);
+
     }
 }

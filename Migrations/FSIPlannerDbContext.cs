@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace fsiplanner_backend.Migrations;
 
-public class FSIPlannerDbContext : IdentityDbContext<IdentityUser>
+public class FSIPlannerDbContext : IdentityDbContext<User>
 {
     public FSIPlannerDbContext(DbContextOptions<FSIPlannerDbContext> options)
     : base(options) { }
@@ -18,6 +18,7 @@ public class FSIPlannerDbContext : IdentityDbContext<IdentityUser>
     public DbSet<PC> PC { get; set; }
     public DbSet<Notes> Notes { get; set; }
     public DbSet<Balance> Balances { get; set; }
+  
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -26,12 +27,8 @@ public class FSIPlannerDbContext : IdentityDbContext<IdentityUser>
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId);
             entity.Property(e => e.FirstName).IsRequired();
             entity.Property(e => e.LastName).IsRequired();
-            entity.Property(e => e.UserName).IsRequired();
-            entity.HasIndex(x => x.UserName).IsUnique();
-            entity.Property(e => e.Password).IsRequired();
             entity.Property(e => e.ProfilePicture);
         });
 
