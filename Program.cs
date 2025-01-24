@@ -47,7 +47,7 @@ builder.Services.AddAuthorization(options => {
     options.AddPolicy("UsernamePolicy", policy => 
         policy.Requirements.Add(new UsernameRequirement(new[]{
             "isaacm",
-            "jenniferh@mutualmail.com",
+            "jenniferh",
         })));
 });
 
