@@ -221,7 +221,6 @@ namespace fsiplanner_backend.Controllers
 
         [HttpPut]
         [Route("{username}")]
-        // [Authorize(Policy = "UsernamePolicy")]
         public async Task<ActionResult<User>> UpdateUser([FromBody] User user)
         {
             if (!ModelState.IsValid)
