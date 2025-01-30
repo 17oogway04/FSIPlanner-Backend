@@ -29,6 +29,7 @@ public class FSIPlannerDbContext : IdentityDbContext<User>
         {
             entity.Property(e => e.FirstName).IsRequired();
             entity.Property(e => e.LastName).IsRequired();
+            entity.Property(e => e.Password).IsRequired();
             entity.Property(e => e.ProfilePicture);
         });
 

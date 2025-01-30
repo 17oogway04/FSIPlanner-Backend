@@ -14,5 +14,8 @@ public class User : IdentityUser
     public string? LastName {get; set;}
 
     public string? ProfilePicture {get; set;}
+
+    [Required]
+    public string? Password{get; set;}
     
 }

@@ -65,15 +65,23 @@ namespace fsiplanner_backend.Controllers
 
         [HttpPost]
         [Route("register")]
-        [Authorize(Policy = "UsernamePolicy")]
-        public async Task<ActionResult> CreateUser([FromBody] User user, string password)
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult> CreateUser([FromBody] User request)
         {
-            if (user == null || !ModelState.IsValid)
+            if (request == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var result = await _userRepository.CreateUserAsync(user, password);
+            var user = new User{
+                UserName = request.UserName,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                NormalizedUserName = request.UserName.ToUpper(),
+                Password = request.Password
+
+            };
+            var result = await _userRepository.CreateUserAsync(user, request.Password);
             if (!result.Succeeded)
             {
                 return BadRequest(result.Errors);
@@ -120,7 +128,7 @@ namespace fsiplanner_backend.Controllers
 
 
         [HttpGet]
-        // [Authorize(Policy = "UsernamePolicy")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public ActionResult<IEnumerable<User>> GetAllUsers()
         {
             return Ok(_userRepository.GetAllUsers());
@@ -128,8 +136,7 @@ namespace fsiplanner_backend.Controllers
 
         [HttpGet]
         [Route("{name}")]
-        // [Authorize(Policy = "UsernamePolicy")]
-        // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<IEnumerable<User>>> GetUserByName(string name)
         {
             IEnumerable<User> names = (IEnumerable<User>)await _userRepository.GetUserByName(name);
@@ -208,7 +215,7 @@ namespace fsiplanner_backend.Controllers
 
         [HttpDelete]
         [Route("{username}")]
-        [Authorize(Policy = "UsernamePolicy")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> DeleteUser(string username)
         {
             var result = await _userRepository.DeleteUserAsync(username);
@@ -221,6 +228,7 @@ namespace fsiplanner_backend.Controllers
 
         [HttpPut]
         [Route("{username}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<User>> UpdateUser([FromBody] User user)
         {
             if (!ModelState.IsValid)
