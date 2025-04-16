@@ -62,7 +62,6 @@ namespace fsiplanner_backend.Controllers
 
             return Ok("Password reset successfully");
         }
-
         [HttpPost]
         [Route("register")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -73,20 +72,29 @@ namespace fsiplanner_backend.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new User{
+            // You could validate role input if coming from frontend
+            var role = string.IsNullOrEmpty(request.Role) ? "User" : request.Role;
+
+            var user = new User
+            {
                 UserName = request.UserName,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 NormalizedUserName = request.UserName.ToUpper(),
                 Password = request.Password
-
             };
-            var result = await _userRepository.CreateUserAsync(user, request.Password);
+
+            var result = await _userRepository.CreateUserAsync(user, request.Password, role);
+
             if (!result.Succeeded)
             {
                 return BadRequest(result.Errors);
             }
-            return NoContent();
+
+            var createdUser = await _userRepository.GetUserByUsername(user.UserName);
+            var roles = await _userManager.GetRolesAsync(createdUser);
+
+            return Ok(new{User = createdUser, Roles = roles});
         }
 
         [HttpGet]

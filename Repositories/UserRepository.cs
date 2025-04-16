@@ -49,22 +49,26 @@ public class UserRepository : IUserRepository
         var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
         return result.Succeeded;
     }
-
-    private string BuildToken(User user)
+    private string BuildToken(User user, IList<string> roles)
     {
         var secret = _config.GetValue<string>("TokenSecret");
-        var signinkey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret!));
+        var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret!));
 
-        var signingCredentials = new SigningCredentials(signinkey, SecurityAlgorithms.HmacSha256);
+        var signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
 
-        var claims = new Claim[]
+        var claims = new List<Claim>
+    {
+        new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+        new Claim(JwtRegisteredClaimNames.Name, user.UserName ?? ""),
+        new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName ?? ""),
+        new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName ?? "")
+    };
+
+        // Add roles as individual claims
+        foreach (var role in roles)
         {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-            new Claim(JwtRegisteredClaimNames.Name, user.UserName ?? ""),
-            new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName ?? ""),
-            new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName ?? ""),
-
-        };
+            claims.Add(new Claim(ClaimTypes.Role, role));
+        }
 
         var jwt = new JwtSecurityToken(
             claims: claims,
@@ -75,9 +79,13 @@ public class UserRepository : IUserRepository
         var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
         return encodedJwt;
     }
-    public async Task<IdentityResult> CreateUserAsync(User user, string password)
+    public async Task<IdentityResult> CreateUserAsync(User user, string password, string role)
     {
         var result = await _userManager.CreateAsync(user, password);
+        if (result.Succeeded)
+        {
+            await _userManager.AddToRoleAsync(user, role);
+        }
         return result;
     }
 
@@ -117,17 +125,18 @@ public class UserRepository : IUserRepository
         existingUser.FirstName = user.FirstName;
         existingUser.LastName = user.LastName;
         existingUser.ProfilePicture = user.ProfilePicture;
+        existingUser.Role = user.Role;
         var result = await _userManager.UpdateAsync(existingUser);
         return result;
     }
 
     public async Task<bool> DeleteUserAsync(string username)
     {
-       var user = await _context.User 
-        .Where(x => x.UserName == username)
-        .SingleOrDefaultAsync();
+        var user = await _context.User
+         .Where(x => x.UserName == username)
+         .SingleOrDefaultAsync();
 
-        if(user == null)
+        if (user == null)
         {
             return false;
         }
@@ -141,7 +150,6 @@ public class UserRepository : IUserRepository
     {
         return await _context.User.FindAsync(id);
     }
-
     public async Task<string> SignInAsync(string username, string password)
     {
         var user = await _userManager.FindByNameAsync(username);
@@ -149,13 +157,14 @@ public class UserRepository : IUserRepository
         {
             return string.Empty;
         }
+
         var isPasswordValid = await _userManager.CheckPasswordAsync(user, password);
         if (!isPasswordValid)
         {
             return string.Empty;
         }
 
-        return BuildToken(user!);
-
+        var roles = await _userManager.GetRolesAsync(user);
+        return BuildToken(user, roles);
     }
 }

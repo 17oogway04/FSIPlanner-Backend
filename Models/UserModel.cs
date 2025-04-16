@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
 
@@ -17,5 +18,8 @@ public class User : IdentityUser
 
     [Required]
     public string? Password{get; set;}
+
+    [NotMapped]
+    public string? Role {get; set;}
     
 }
