@@ -5,7 +5,7 @@ namespace fsiplanner_backend.Repositories;
 
 public interface IUserRepository
 {
-    Task<IdentityResult> CreateUserAsync(User user, string password);
+    Task<IdentityResult> CreateUserAsync(User user, string password, string role);
     Task<string> SignInAsync(string username, string password);
     User GetCurrentUser();
     Task<User> GetUserById(string id);
