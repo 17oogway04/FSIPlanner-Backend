@@ -67,7 +67,7 @@ public class UserRepository : IUserRepository
         // Add roles as individual claims
         foreach (var role in roles)
         {
-            claims.Add(new Claim(ClaimTypes.Role, role));
+            claims.Add(new Claim("role", role));
         }
 
         var jwt = new JwtSecurityToken(
