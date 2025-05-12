@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 using fsiplanner_backend.Migrations;
 using fsiplanner_backend.Models;
 using Microsoft.AspNetCore.Identity;
@@ -49,7 +50,7 @@ public class UserRepository : IUserRepository
         var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
         return result.Succeeded;
     }
-    private string BuildToken(User user, IList<string> roles)
+    private async Task<string> BuildToken(User user, IList<string> roles)
     {
         var secret = _config.GetValue<string>("TokenSecret");
         var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret!));
@@ -165,6 +166,6 @@ public class UserRepository : IUserRepository
         }
 
         var roles = await _userManager.GetRolesAsync(user);
-        return BuildToken(user, roles);
+        return await BuildToken(user, roles);
     }
 }

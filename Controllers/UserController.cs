@@ -95,26 +95,35 @@ namespace fsiplanner_backend.Controllers
             var createdUser = await _userRepository.GetUserByUsername(user.UserName);
             var roles = await _userManager.GetRolesAsync(createdUser);
 
-            return Ok(new{User = createdUser, Roles = roles});
+            return Ok(new { User = createdUser, Roles = roles });
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("login")]
-        public async Task<ActionResult<string>> SignIn(string username, string password)
+        public async Task<ActionResult<string>> SignIn([FromBody] LoginRequest request)
         {
-            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            if (string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.Password))
             {
                 return BadRequest("Username and password are required");
             }
+            var user = await _userManager.FindByNameAsync(request.Username);
+            if (user == null) return Unauthorized();
 
-            var token = await _userRepository.SignInAsync(username, password);
+            var isValid = await _userManager.CheckPasswordAsync(user, request.Password);
+            if (!isValid) return Unauthorized();
+
+            var token = await _userRepository.SignInAsync(request.Username, request.Password);
+            var roles = await _userManager.GetRolesAsync(user);
 
             if (string.IsNullOrWhiteSpace(token))
             {
                 return Unauthorized();
             }
 
-            return Ok(token);
+            return Ok(new{
+                token,
+                role = roles.FirstOrDefault()
+            });
         }
 
         [HttpGet]
