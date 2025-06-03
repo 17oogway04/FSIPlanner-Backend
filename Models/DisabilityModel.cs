@@ -15,21 +15,21 @@ public class DisabilityInsurance
 
     public string? Insured {get; set;}
 
-    public string? Premium {get; set;}
+    public double? Premium {get; set;}
 
-    public string? CashValue {get; set;}
+    public double? CashValue {get; set;}
 
-    public string? MonthlyDeathBenefitOne {get; set;}
+    public double? MonthlyDeathBenefitOne {get; set;}
 
-    public string? MonthlyDeathBenefitTwo {get; set;}
+    public double? MonthlyDeathBenefitTwo {get; set;}
 
     public string? Riders {get; set;}
 
-    public string? RidersBenefit {get; set;}
+    public double? RidersBenefit {get; set;}
 
-    public string? EliminationPeriod {get; set;}
+    public double? EliminationPeriod {get; set;}
 
-    public string? BenefitPeriod {get; set;}
+    public double? BenefitPeriod {get; set;}
         public string? Username {get; set;}
 
 
