@@ -13,7 +13,7 @@ public class Liabilities
 
     public double? Balance {get; set;}
 
-    public string? Rate {get; set;}
+    public double? Rate {get; set;}
 
     public double? Payment {get; set;}
 

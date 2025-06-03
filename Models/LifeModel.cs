@@ -16,19 +16,19 @@ public string? Owner {get; set;}
 
 public string? Insured {get; set;}
 
-public string? Premium {get; set;}
+public double? Premium {get; set;}
 
 public double? CashValue {get; set;}
 
-public string? DeathBenefitOne {get; set;}
+public double? DeathBenefitOne {get; set;}
 
-public string? DeathBenefitTwo {get; set;}
+public double? DeathBenefitTwo {get; set;}
 
 public string? Riders {get; set;}
 
-public string? RidersBenefit {get; set;}
+public double? RidersBenefit {get; set;}
 
-public string? PercentageToSavings {get; set;}
+public double? PercentageToSavings {get; set;}
     public string? Username {get; set;}
 
 
