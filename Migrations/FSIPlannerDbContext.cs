@@ -18,7 +18,8 @@ public class FSIPlannerDbContext : IdentityDbContext<User>
     public DbSet<PC> PC { get; set; }
     public DbSet<Notes> Notes { get; set; }
     public DbSet<Balance> Balances { get; set; }
-  
+    public DbSet<AcctMovement> AcctMovements { get; set; }
+
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -31,6 +32,20 @@ public class FSIPlannerDbContext : IdentityDbContext<User>
             entity.Property(e => e.LastName).IsRequired();
             entity.Property(e => e.Password).IsRequired();
             entity.Property(e => e.ProfilePicture);
+        });
+
+        modelBuilder.Entity<AcctMovement>(entity =>
+        {
+            entity.HasKey(e => e.AcctMovementId);
+            entity.Property(e => e.FullOrPartial).IsRequired();
+            entity.Property(e => e.CompanyFrom).IsRequired();
+            entity.Property(e => e.CompanyTo).IsRequired();
+            entity.Property(e => e.DollarAmt).IsRequired();
+            entity.Property(e => e.Date).IsRequired();
+            entity.Property(e => e.Username);
+
+            entity.HasIndex(e => e.UserId);
+            entity.Property(e => e.UserId).IsRequired();
         });
 
         modelBuilder.Entity<Assets>(entity =>

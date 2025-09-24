@@ -64,6 +64,7 @@ builder.Services.AddScoped<ILifeRepository, LifeRepository>();
 builder.Services.AddScoped<INotesRepository, NotesRepository>();
 builder.Services.AddScoped<IPCRepository, PCRepository>();
 builder.Services.AddScoped<IBalanceRepository, BalanceRepository>();
+builder.Services.AddScoped<IAcctMovement, AcctMovementRepository>();
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddIdentity<User, IdentityRole>()
